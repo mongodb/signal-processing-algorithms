@@ -1,0 +1,65 @@
+buildvariants:
+  - display_name: Ubuntu 16.04
+    name: ubuntu1604
+    run_on:
+      - ubuntu1604-test
+    tasks:
+      - name: unit_tests
+      - name: check_formatting
+      - name: deploy
+functions:
+  create virtualenv:
+    - command: shell.exec
+      params:
+        working_dir: project
+        script: |
+          ./scripts/create_virtualenv ${pypi_user} ${pypi_password} ${pypi_url}'/simple'
+  deploy:
+    - command: shell.exec
+      params:
+        working_dir: project
+        script: |
+          set -o errexit
+          . venv/bin/activate
+
+
+          if [ "${is_patch}" = "true" ]; then
+            # Do not deploy on patches.
+            exit 0
+          fi
+
+          scripts/deploy.sh ${pypi_user} ${pypi_password} 'https://'${pypi_url}
+pre:
+  - command: git.get_project
+    params:
+      directory: project
+  - func: create virtualenv
+post:
+  - command: attach.xunit_results
+    params:
+      file: project/test_output_junit.xml
+tasks:
+  - name: unit_tests
+    commands:
+      - command: shell.exec
+        params:
+          working_dir: project
+          script: |
+            . venv/bin/activate
+            pytest --flake8 --junitxml=test_output_junit.xml
+  - name: check_formatting
+    commands:
+      - command: shell.exec
+        params:
+          working_dir: project
+          script: |
+            set -o errexit
+            . venv/bin/activate
+            black --check --diff setup.py src tests
+  - name: deploy
+    depends_on:
+      - name: unit_tests
+      - name: check_formatting
+    patchable: false
+    commands:
+      - func: deploy

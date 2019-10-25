@@ -1,0 +1,26 @@
+# Python
+*.pyc
+/venv
+/pre_commit_venv
+/.coverage
+/coverage.xml
+pip-wheel-metadata/
+
+# JetBrains
+.idea
+
+# Unit test config file
+/config.yml
+
+*.log
+/*/data
+*.xml
+
+# Created by setup.py
+*.egg-info/
+/build
+/dist
+*.so
+
+# Mac specific
+.DS_Store

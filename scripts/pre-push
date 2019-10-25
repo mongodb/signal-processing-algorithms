@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -o errexit
+
+if [[ -d "pre_commit_venv" ]]; then
+    rm -rf pre_commit_venv
+fi
+
+virtualenv -p python3 pre_commit_venv
+. pre_commit_venv/bin/activate
+
+pip install -r requirements.txt
+
+black --check --diff setup.py src tests
+
+pip install .
+
+pytest --flake8
+
+deactivate
+
+rm -rf pre_commit_venv
