@@ -1,3 +1,4 @@
+"""Test data for change point detection."""
 perf_1635_series = [
     28681.119699779538,
     29161.132432282106,

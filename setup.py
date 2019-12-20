@@ -1,3 +1,4 @@
+"""Distutils based setup file for installation."""
 import sys
 import warnings
 import distutils.core
@@ -25,9 +26,7 @@ although they do result in significant speed improvements.
 """
 
     def run(self):
-        """
-        Run a custom build, errors are ignored.
-        """
+        """Run a custom build, errors are ignored."""
         try:
             build_ext.run(self)
         except DistutilsPlatformError:
@@ -42,9 +41,7 @@ although they do result in significant speed improvements.
             )
 
     def build_extension(self, ext):
-        """
-        Build the extension, ignore any errors.
-        """
+        """Build the extension, ignore any errors."""
         name = ext.name
         try:
             build_ext.build_extension(self, ext)

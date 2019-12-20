@@ -1,6 +1,5 @@
-"""
-Computes the E-Divisive means change points.
-"""
+# -*- coding: utf-8 -*-
+"""Compute change points using E-Divisive means."""
 
 
 import os
@@ -61,6 +60,7 @@ A named tuple for a change point returned by the E-Divisive algorithm.
 def deterministic_random(seed):
     """
     Call random.seed(seed) during invocation and then restore state after.
+
     :param seed: RNG seed
     """
     state = random.getstate()
@@ -72,14 +72,12 @@ def deterministic_random(seed):
 
 
 class EDivisiveNumpyImp(object):  # pylint: disable=too-many-instance-attributes
-    """
-    Class to compute the E-Divisive means change points.
-    """
+    """Class to compute the E-Divisive means change points using numpy."""
 
     # pylint: disable=too-many-arguments
     def __init__(self, pvalue=0.05, permutations=100):
         """
-        This class implements the E-Divisive algorithm in python.
+        Create the E-Divisive algorithm instance.
 
         :param float pvalue: This the significance level for our testing.
         See 'P-value<https://en.wikipedia.org/wiki/P-value>'.
@@ -161,7 +159,6 @@ class EDivisiveNumpyImp(object):  # pylint: disable=too-many-instance-attributes
         Given an array N calculate an NxN difference matrix.
 
         :param list(float) series: The array to calculate the matrix for.
-
         :return: The difference matrix.
         :rtype: list(list(float)).
         """
@@ -178,18 +175,16 @@ class EDivisiveNumpyImp(object):  # pylint: disable=too-many-instance-attributes
         :return: The qhat values.
         :rtype: np.array(float).
         """
-
         return self._qhat_values(series).values
 
     def _qhat_values(self, series):  # pylint: disable=too-many-locals,too-many-branches
         """
-        Internal method to calculate the diffs matrix and delegate to calculate_qhat_values.
+        Calculate the diffs matrix and delegate to calculate_qhat_values.
 
         :param np.array(float) series: the points to process
         :return: The qhat values.
         :rtype: QHatValues.
         """
-
         # used as the window size in extract_q
         length = len(series)
         qhat_values = np.zeros(length, dtype=np.float)
@@ -204,9 +199,10 @@ class EDivisiveNumpyImp(object):  # pylint: disable=too-many-instance-attributes
 
     def _calculate_qhat_values(self, series, diffs, qhat_values):
         """
-        Find Q-Hat values for all candidate change points. This provides the current
-        'best' python implementation. The intention is to override this for other
-        implementations, say a native implementation.
+        Find Q-Hat values for all candidate change points.
+
+        This provides the current 'best' python implementation. The intention is to override this
+        for other implementations, say a native implementation.
 
         :param numpy.array(float) series: The points to process.
         :param numpy.array(float) qhat_values: The array to store the qhat values.
@@ -270,9 +266,7 @@ class EDivisiveNumpyImp(object):  # pylint: disable=too-many-instance-attributes
             return self._compute_change_points(series)
 
     def _compute_change_points(self, series):  # pylint: disable=too-many-locals
-        """
-        Compute the change points for a series.
-        """
+        """Compute the change points for a series."""
         LOG.info("compute_change_points")
         pts = len(series)
         qhat_values = self._qhat_values(series)
@@ -345,9 +339,7 @@ DSI_DISABLE_NATIVE_E_DIVISIVE = os.environ.get(
 if not DSI_DISABLE_NATIVE_E_DIVISIVE and e_divisive_native_wrapper.LOADED:
 
     class EDivisiveNativeImp(EDivisiveNumpyImp):  # pylint: disable=too-many-instance-attributes
-        """
-        Derive a new class and use the native E-Divisive implementation.
-        """
+        """Derive a new class and use the native E-Divisive implementation."""
 
         def _calculate_qhat_values(
             self, series, diffs, qhat_values

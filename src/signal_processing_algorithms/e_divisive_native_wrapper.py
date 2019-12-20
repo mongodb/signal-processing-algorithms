@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 """
-Wrap a C library function to calculate E-Divisive qhat values with
-input using the numpy.ctypeslib.
+Wrap C library functions.
+
+This wrapper calculates E-Divisive qhat values from inputs using the numpy.ctypeslib.
 """
 
 from ctypes import c_int
@@ -22,7 +24,10 @@ A flag indicating if the native library was found. Pessimistically set to False.
 
 def qhat_values_wrapper(series, qhat_values, diffs):  # pylint: disable=unused-argument
     """
-    This defines a qhat_func that raises an ImportError.
+    Stub function which always raises an ImportError.
+
+    This stub handles the case where the c wrapper could not be imported and a pure
+    python version was not provided.
 
     :param np.array(float) series: The series data.
     :raises: ImportError is always raised by this function.
@@ -32,7 +37,10 @@ def qhat_values_wrapper(series, qhat_values, diffs):  # pylint: disable=unused-a
 
 def qhat_diffs_wrapper(series):  # pylint: disable=unused-argument
     """
-    A wrapper function to marshall the parameters and call the native qhat_values function.
+    Stub function which always raises an ImportError.
+
+    This stub handles the case where the c wrapper could not be imported and a pure
+    python version was not provided.
 
     :param np.array(float) series: The series data.
     :param np.2darray(float) diffs: The diffs matrix.
@@ -65,7 +73,7 @@ try:
 
     def qhat_values_wrapper(series, diffs, qhat_values):  # noqa
         """
-        A wrapper function to marshall the parameters and call the native qhat_values function.
+        Marshall the parameters and call the native qhat_values function.
 
         :param np.array(float) series: The series data.
         :param np.2darray(float) diffs: The diffs matrix.
@@ -85,7 +93,7 @@ try:
 
     def qhat_diffs_wrapper(series):  # noqa
         """
-        A wrapper function to marshall the parameters and call the native qhat_values function.
+        Marshall the parameters and call the native qhat_values function.
 
         :param np.array(float) series: The series data.
         :param np.2darray(float) diffs: The diffs matrix.

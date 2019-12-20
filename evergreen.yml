@@ -46,7 +46,7 @@ tasks:
           working_dir: project
           script: |
             . venv/bin/activate
-            pytest --flake8 --junitxml=test_output_junit.xml
+            pytest --junitxml=test_output_junit.xml --flake8 --pydocstyle
   - name: check_formatting
     commands:
       - command: shell.exec

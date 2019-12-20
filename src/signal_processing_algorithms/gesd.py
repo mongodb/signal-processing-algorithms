@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Outlier Detection using  Generalized ESD Test for Outliers
+GESD based Detect outliers.
+
+Generalized ESD Test for Outliers
 see 'GESD<https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm>'
 """
 import collections

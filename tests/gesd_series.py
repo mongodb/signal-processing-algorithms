@@ -1,3 +1,4 @@
+"""Test data for outlier detection."""
 mad_series = [
     14969.153332576032,
     15007.362736414036,
