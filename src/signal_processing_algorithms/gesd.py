@@ -6,13 +6,14 @@ Generalized ESD Test for Outliers
 see 'GESD<https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm>'
 """
 import collections
+from typing import List
 
 from scipy.stats import t
 import numpy as np
 import numpy.ma as ma
-from signal_processing_algorithms.config import Configuration
+import structlog
 
-LOG = Configuration.get_logger()
+LOG = structlog.get_logger()
 
 GesdResult = collections.namedtuple(
     "GesdResult",
@@ -33,7 +34,9 @@ The low confidence outliers are in suspicious_indexes[:count].
 """
 
 
-def gesd(data, max_outliers=10, significance_level=0.05, mad=False):
+def gesd(
+    data: List[float], max_outliers: int = 10, significance_level: float = 0.05, mad: bool = False
+) -> GesdResult:
     """
     Perform a Generalized ESD Test for Outliers.
 
@@ -63,15 +66,13 @@ def gesd(data, max_outliers=10, significance_level=0.05, mad=False):
     Note: the test_statistics array is signed, this allows determination of the outlier above
     or below the mean.
 
-    :param list(float) data: The data to test.
-    :param int max_outliers: Test for up to max outliers.
-    :param float significance_level: Test for up to max outliers.
-    :param bool mad: Use Median Absolute Deviation.
+    :param data: The data to test.
+    :param max_outliers: Test for up to max outliers.
+    :param significance_level: Test for up to max outliers.
+    :param mad: Use Median Absolute Deviation.
     :return: The number of outliers, suspicious indexes, test_statistics, critical_values, z_values.
-    :rtype: GesdResult
     see 'here<https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm>'
     """
-    # pylint: disable=too-many-locals
     if data is None or np.size(data) == 0:
         raise ValueError("No Data ({})".format(data))
     length = len(data)

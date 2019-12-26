@@ -20,7 +20,7 @@ class TestEDivisiveTIG1423(object):
         """
         Test that EDivisive applies defaults for None.
         """
-        e_divisive = EDivisive(pvalue=None, permutations=None)
+        e_divisive = EDivisive()
         assert e_divisive.pvalue is not None
         assert e_divisive.permutations is not None
 
@@ -74,5 +74,4 @@ class TestEDivisive(object):
         """
         Test that the native implementation of e_divisive is included in the package
         """
-        EDivisive()
         assert LOADED

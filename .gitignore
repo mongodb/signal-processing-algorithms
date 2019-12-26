@@ -24,3 +24,5 @@ pip-wheel-metadata/
 
 # Mac specific
 .DS_Store
+
+.mypy_cache/

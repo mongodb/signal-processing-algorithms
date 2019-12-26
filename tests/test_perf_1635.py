@@ -7,7 +7,7 @@ import unittest
 
 import numpy as np
 from signal_processing_algorithms.e_divisive import EDivisive
-from e_divisive_series import perf_1635_expected_result, perf_1635_series
+from tests.test_e_divisive_series import perf_1635_expected_result, perf_1635_series
 
 
 class CanonicalEDivisive(object):
@@ -77,7 +77,7 @@ class TestPerf1635Simple(object):
         dtype=np.float,
     )
 
-    def test_old_algorithm(self):
+    def test_old_algorithm(self) -> None:
         """
         Test to double check slow O(n^2) algorithm. Small data set so this is ok.
         """
@@ -85,7 +85,7 @@ class TestPerf1635Simple(object):
         q_values = algorithm.qs(self.series)
         assert all(np.isclose(self.expected, q_values))
 
-    def test_fixed(self):
+    def test_fixed(self) -> None:
         """
         Test that the current algorithm generates the same q values as the original.
         """

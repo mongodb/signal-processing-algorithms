@@ -4,8 +4,7 @@ buildvariants:
     run_on:
       - ubuntu1604-test
     tasks:
-      - name: unit_tests
-      - name: check_formatting
+      - name: tests_and_checks
       - name: deploy
 functions:
   create virtualenv:
@@ -39,27 +38,17 @@ post:
     params:
       file: project/test_output_junit.xml
 tasks:
-  - name: unit_tests
+  - name: tests_and_checks
     commands:
       - command: shell.exec
         params:
           working_dir: project
           script: |
             . venv/bin/activate
-            pytest --junitxml=test_output_junit.xml --flake8 --pydocstyle
-  - name: check_formatting
-    commands:
-      - command: shell.exec
-        params:
-          working_dir: project
-          script: |
-            set -o errexit
-            . venv/bin/activate
-            black --check --diff setup.py src tests
+            pytest --junitxml=test_output_junit.xml --flake8 --black --pydocstyle --mypy
   - name: deploy
     depends_on:
-      - name: unit_tests
-      - name: check_formatting
+      - name: tests_and_checks
     patchable: false
     commands:
       - func: deploy

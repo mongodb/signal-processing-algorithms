@@ -8,8 +8,8 @@ import numpy as np
 import pytest
 
 from signal_processing_algorithms.gesd import gesd
-from signal_processing_algorithms.e_divisive import deterministic_random
-from gesd_series import mad_series, real_series
+from signal_processing_algorithms.e_divisive_numpy import deterministic_random
+from tests.test_gesd_series import mad_series, real_series
 
 
 class TestGesdInputs(object):

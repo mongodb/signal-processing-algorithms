@@ -1,3 +1,4 @@
-"""Signal Processing Algorithms module."""
+"""Algorithms for processing signals."""
 __package_name__ = "signal_processing_algorithms"
-__version__ = "0.2.0"
+VERSION = (0, 3, 0)
+__version__ = ".".join(map(str, VERSION))

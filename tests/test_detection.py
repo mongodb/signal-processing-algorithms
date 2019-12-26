@@ -3,7 +3,8 @@ Change points detection related tests.
 """
 import unittest
 import numpy as np
-from signal_processing_algorithms.e_divisive import EDivisive, EDivisiveChangePoint
+from signal_processing_algorithms.e_divisive import EDivisive
+from signal_processing_algorithms.e_divisive_numpy import EDivisiveChangePoint
 
 
 class TestPostRunCheck(unittest.TestCase):
