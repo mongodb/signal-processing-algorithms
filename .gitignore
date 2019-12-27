@@ -13,7 +13,6 @@ pip-wheel-metadata/
 /config.yml
 
 *.log
-/*/data
 *.xml
 
 # Created by setup.py

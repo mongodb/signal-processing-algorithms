@@ -45,7 +45,7 @@ tasks:
           working_dir: project
           script: |
             . venv/bin/activate
-            pytest --junitxml=test_output_junit.xml --flake8 --black --pydocstyle --mypy
+            pytest
   - name: deploy
     depends_on:
       - name: tests_and_checks

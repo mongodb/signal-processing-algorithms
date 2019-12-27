@@ -9,7 +9,6 @@ import pytest
 
 from signal_processing_algorithms.gesd import gesd
 from signal_processing_algorithms.e_divisive_numpy import deterministic_random
-from tests.test_gesd_series import mad_series, real_series
 
 
 class TestGesdInputs(object):
@@ -83,13 +82,13 @@ class TestSimple(object):
 class TestReal(object):
     """ Test Real data. """
 
-    def test_standard(self):
+    def test_standard(self, real_series):
         """Test gesd on real data with standard."""
         number_outliers, suspicious_indexes, _, _, _ = gesd(real_series)
         assert 2 == number_outliers
         assert [90, 4, 27, 88, 37, 64, 126, 78, 74, 47] == suspicious_indexes
 
-    def test_mad(self):
+    def test_mad(self, mad_series):
         """Test gesd on real data with Median Absolute Deviation."""
         number_outliers, suspicious_indexes, _, _, _ = gesd(mad_series, mad=True)
         assert 2 == number_outliers

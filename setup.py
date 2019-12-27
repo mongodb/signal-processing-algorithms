@@ -11,7 +11,12 @@ setup(
     python_requires=">=3",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
-    install_requires=["numpy~=1.16", "scipy~=1.3", "structlog~=19.1"],
+    install_requires=[
+        "misc-utils-py~=0.1.2",
+        "numpy~=1.16",
+        "scipy~=1.3",
+        "structlog~=19.1"
+    ],
     zip_safe=False,
     include_package_data=True,
     ext_modules=[

@@ -3,15 +3,15 @@ E-Divisive related tests.
 """
 
 
-import unittest
-
 import numpy as np
 from signal_processing_algorithms.e_divisive import EDivisive
-from tests.test_e_divisive_series import perf_1635_expected_result, perf_1635_series
+from signal_processing_algorithms.e_divisive import __name__ as under_test_module_name
+from miscutils.testing import relative_patch_maker
+
+patch = relative_patch_maker(under_test_module_name)
 
 
-class CanonicalEDivisive(object):
-    # pylint: disable=invalid-name, too-many-locals, too-many-branches
+class OldEDivisive(object):
     """
     This is the original O(n^2) E-Divisive implementation as described in the whitepaper.
     It is here for comparison purposes only and to allow the q values to
@@ -23,11 +23,11 @@ class CanonicalEDivisive(object):
     """
 
     # Implementing change-point detection algorithm from https://arxiv.org/pdf/1306.4933.pdf
-    def qs(self, series):
+    def qs(self, series: np.ndarray):
         """
         Find Q-Hat values for all candidate change points
 
-        :param list series: the points to process
+        :param series: the points to process
         :return:
         """
         length = len(series)
@@ -53,7 +53,7 @@ class CanonicalEDivisive(object):
         return qs
 
 
-class TestPerf1635Simple(object):
+class TestAlgorithmContinuity(object):
     """
     Test PERF-1635 is fixed correctly.
     """
@@ -77,15 +77,15 @@ class TestPerf1635Simple(object):
         dtype=np.float,
     )
 
-    def test_old_algorithm(self) -> None:
+    def test_old_algorithm(self):
         """
         Test to double check slow O(n^2) algorithm. Small data set so this is ok.
         """
-        algorithm = CanonicalEDivisive()
+        algorithm = OldEDivisive()
         q_values = algorithm.qs(self.series)
         assert all(np.isclose(self.expected, q_values))
 
-    def test_fixed(self) -> None:
+    def test_fixed(self):
         """
         Test that the current algorithm generates the same q values as the original.
         """
@@ -93,24 +93,44 @@ class TestPerf1635Simple(object):
         q_values = algorithm.qhat_values(self.series)
         assert all(np.isclose(self.expected, q_values))
 
+    @patch("e_divisive_native_wrapper")
+    def test_fallback(self, mock_native_wrapper):
+        """
+        Test that the fallback algorithm generates the same q values as the original.
+        """
+        mock_native_wrapper.LOADED = False
+        algorithm = EDivisive()
+        q_values = algorithm.qhat_values(self.series)
+        assert all(np.isclose(self.expected, q_values))
 
-class TestPerf1635(unittest.TestCase):
+
+class TestRobustContinuity:
     """
     Robust test for PERF-1635.
     """
 
-    def test_old_algorithm(self):
+    def test_old_algorithm(self, robust_series, expected_result_robust_series):
         """
         Test to double check slow O(n^2) algorithm. Small data set so this is ok.
         """
-        algorithm = CanonicalEDivisive()
-        q_values = algorithm.qs(perf_1635_series)
-        assert all(np.isclose(perf_1635_expected_result, q_values))
+        algorithm = OldEDivisive()
+        q_values = algorithm.qs(robust_series)
+        assert all(np.isclose(expected_result_robust_series, q_values))
 
-    def test_q_values(self):
+    def test_q_values(self, robust_series, expected_result_robust_series):
         """
         Test that the current algorithm generates the same q values as the original.
         """
         algorithm = EDivisive()
-        q_values = algorithm.qhat_values(perf_1635_series)
-        assert all(np.isclose(perf_1635_expected_result, q_values))
+        q_values = algorithm.qhat_values(robust_series)
+        assert all(np.isclose(expected_result_robust_series, q_values))
+
+    @patch("e_divisive_native_wrapper")
+    def test_fallback(self, mock_native_wrapper, robust_series, expected_result_robust_series):
+        """
+        Test that the fallback algorithm generates the same q values as the original.
+        """
+        mock_native_wrapper.LOADED = False
+        algorithm = EDivisive()
+        q_values = algorithm.qhat_values(robust_series)
+        assert all(np.isclose(expected_result_robust_series, q_values))
