@@ -1,13 +1,16 @@
 """
 Change points detection related tests.
 """
-import unittest
 import numpy as np
 from signal_processing_algorithms.e_divisive import EDivisive
-from signal_processing_algorithms.e_divisive_numpy import EDivisiveChangePoint
+from signal_processing_algorithms.e_divisive.calculators import cext_calculator
+from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint
+from signal_processing_algorithms.e_divisive.significance_test import (
+    QHatPermutationsSignificanceTester,
+)
 
 
-class TestPostRunCheck(unittest.TestCase):
+class TestPostRunCheck:
     """
     Test post run check.
     """
@@ -87,48 +90,25 @@ class TestPostRunCheck(unittest.TestCase):
             176,
             250,
         ]
-        pvalue = 0.01
-        permutations = 100
-        algo = EDivisive(pvalue, permutations)
-        points = algo.compute_change_points(series)
+        calculator = cext_calculator
+        tester = QHatPermutationsSignificanceTester(
+            calculator=calculator, pvalue=0.01, permutations=100
+        )
+        algo = EDivisive(seed=1234, calculator=calculator, significance_tester=tester)
+        points = algo.get_change_points(series)
 
         assert 3 == len(points)
 
-        expected = EDivisiveChangePoint(
-            index=40,
-            window_size=60,
-            value_to_avg=26.864695599042758,
-            average_diff=88.77666666666667,
-            average=103.36666666666666,
-            value=2776.9140350877196,
-            value_to_avg_diff=31.279773608918102,
-            probability=0.0,
-        )
+        expected = EDivisiveChangePoint(index=40, qhat=2776.9140350877196, probability=0.0)
 
         assert expected == points[0]
 
-        expected = EDivisiveChangePoint(
-            index=20,
-            window_size=40,
-            value_to_avg=16.517170931024417,
-            average_diff=42.9325,
-            average=54.1,
-            value=893.578947368421,
-            value_to_avg_diff=20.813578230208375,
-            probability=0.0,
-        )
+        expected = EDivisiveChangePoint(index=20, qhat=893.578947368421, probability=0.0)
 
         assert expected == points[1]
 
         expected = EDivisiveChangePoint(
-            index=50,
-            window_size=20,
-            value_to_avg=0.8304441142479775,
-            average_diff=36.06,
-            average=201.9,
-            value=167.66666666666666,
-            value_to_avg_diff=4.649657977444998,
-            probability=0.009900990099009901,
+            index=50, qhat=167.66666666666666, probability=0.009900990099009901
         )
 
         assert expected == points[2]
@@ -140,11 +120,12 @@ class TestPostRunCheck(unittest.TestCase):
         if series is None:
             series = np.full(30, 50, dtype=np.int)
             series[15:30] = 100
-        pvalue = 0.01
-        permutations = 100
-
-        algo = EDivisive(pvalue, permutations)
-        points = algo.compute_change_points(series)
+        calculator = cext_calculator
+        tester = QHatPermutationsSignificanceTester(
+            pvalue=0.01, permutations=100, calculator=calculator
+        )
+        algo = EDivisive(seed=1234, calculator=calculator, significance_tester=tester)
+        points = algo.get_change_points(series)
         points = sorted(points, key=lambda point: point.index)
         return points, series
 
@@ -191,16 +172,7 @@ class TestPostRunCheck(unittest.TestCase):
         points, state = self._test_helper(series=series)
 
         assert 1 == len(points)
-        kwargs = {
-            "index": 15,
-            "window_size": 30,
-            "value_to_avg": 7.913043478260868,
-            "average_diff": 24.88888888888889,
-            "average": 76.66666666666667,
-            "value": 606.6666666666666,
-            "value_to_avg_diff": 24.374999999999996,
-            "probability": 0.0,
-        }
+        kwargs = {"index": 15, "qhat": 606.6666666666666, "probability": 0.0}
         expected = EDivisiveChangePoint(**kwargs)
         assert expected == points[0]
 
@@ -216,29 +188,11 @@ class TestPostRunCheck(unittest.TestCase):
 
         points, state = self._test_helper(series=series)
         assert 2 == len(points)
-        kwargs = {
-            "index": 15,
-            "window_size": 33,
-            "value_to_avg": 7.030797385620915,
-            "average_diff": 24.977043158861342,
-            "average": 75.75757575757575,
-            "value": 532.636165577342,
-            "value_to_avg_diff": 21.325028835063435,
-            "probability": 0.0,
-        }
+        kwargs = {"index": 15, "qhat": 532.636165577342, "probability": 0.0}
         expected = EDivisiveChangePoint(**kwargs)
         assert points[0] == expected
 
-        kwargs = {
-            "index": 33,
-            "window_size": 45,
-            "value_to_avg": 2.9912023460410566,
-            "average_diff": 23.506172839506174,
-            "average": 68.88888888888889,
-            "value": 206.06060606060612,
-            "value_to_avg_diff": 8.766233766233768,
-            "probability": 0.0,
-        }
+        kwargs = {"index": 33, "qhat": 206.06060606060612, "probability": 0.0}
         expected = EDivisiveChangePoint(**kwargs)
         assert points[1] == expected
 
@@ -257,29 +211,11 @@ class TestPostRunCheck(unittest.TestCase):
 
         assert 2 == len(points)
 
-        kwargs = {
-            "index": 15,
-            "window_size": 30,
-            "value_to_avg": 7.913043478260868,
-            "average_diff": 24.88888888888889,
-            "average": 76.66666666666667,
-            "value": 606.6666666666666,
-            "value_to_avg_diff": 24.374999999999996,
-            "probability": 0.0,
-        }
+        kwargs = {"index": 15, "qhat": 606.6666666666666, "probability": 0.0}
         expected = EDivisiveChangePoint(**kwargs)
         assert expected == points[0]
 
-        kwargs = {
-            "index": 30,
-            "window_size": 45,
-            "value_to_avg": 11.959075407351268,
-            "average_diff": 43.65432098765432,
-            "average": 101.11111111111111,
-            "value": 1209.1954022988505,
-            "value_to_avg_diff": 27.699329068497423,
-            "probability": 0.0,
-        }
+        kwargs = {"index": 30, "qhat": 1209.1954022988505, "probability": 0.0}
         expected = EDivisiveChangePoint(**kwargs)
         assert expected == points[1]
 
@@ -290,3 +226,10 @@ class TestPostRunCheck(unittest.TestCase):
         series = np.full(30, 50, dtype=np.int)
         points, _ = self._test_helper(series=series)
         assert 0 == len(points)
+
+    def test_long_series(self, long_series):
+        """
+        Test no regression.
+        """
+        points, _ = self._test_helper(series=long_series)
+        assert 4 == len(points)

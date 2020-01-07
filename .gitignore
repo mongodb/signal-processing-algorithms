@@ -25,3 +25,5 @@ pip-wheel-metadata/
 .DS_Store
 
 .mypy_cache/
+
+secrets.*

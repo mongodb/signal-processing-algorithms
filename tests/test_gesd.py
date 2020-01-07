@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 
 from signal_processing_algorithms.gesd import gesd
-from signal_processing_algorithms.e_divisive_numpy import deterministic_random
+from signal_processing_algorithms.determinism import deterministic_random
 
 
 class TestGesdInputs(object):

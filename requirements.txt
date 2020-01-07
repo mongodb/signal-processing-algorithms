@@ -3,3 +3,4 @@ pytest-black~=0.3.7
 pytest-flake8~=1.0.4
 pytest-mypy~=0.4.2
 pytest-pydocstyle~=2.0.0
+twine~=3.1.1

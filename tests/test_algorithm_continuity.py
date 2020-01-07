@@ -2,13 +2,12 @@
 E-Divisive related tests.
 """
 
-
 import numpy as np
-from signal_processing_algorithms.e_divisive import EDivisive
-from signal_processing_algorithms.e_divisive import __name__ as under_test_module_name
+from signal_processing_algorithms.e_divisive import default_implementation
+from signal_processing_algorithms.e_divisive.calculators import __name__ as patchable
 from miscutils.testing import relative_patch_maker
 
-patch = relative_patch_maker(under_test_module_name)
+patch = relative_patch_maker(patchable)
 
 
 class OldEDivisive(object):
@@ -89,18 +88,22 @@ class TestAlgorithmContinuity(object):
         """
         Test that the current algorithm generates the same q values as the original.
         """
-        algorithm = EDivisive()
-        q_values = algorithm.qhat_values(self.series)
+        algorithm = default_implementation()
+        q_values = algorithm._calculator.calculate_qhat_values(
+            algorithm._calculator.calculate_diffs(self.series)
+        )
         assert all(np.isclose(self.expected, q_values))
 
-    @patch("e_divisive_native_wrapper")
-    def test_fallback(self, mock_native_wrapper):
+    @patch("cext_calculator.C_EXTENSION_LOADED")
+    def test_fallback(self, mock_loaded):
         """
         Test that the fallback algorithm generates the same q values as the original.
         """
-        mock_native_wrapper.LOADED = False
-        algorithm = EDivisive()
-        q_values = algorithm.qhat_values(self.series)
+        mock_loaded.__bool__.return_value = False
+        algorithm = default_implementation()
+        q_values = algorithm._calculator.calculate_qhat_values(
+            algorithm._calculator.calculate_diffs(self.series)
+        )
         assert all(np.isclose(self.expected, q_values))
 
 
@@ -121,16 +124,20 @@ class TestRobustContinuity:
         """
         Test that the current algorithm generates the same q values as the original.
         """
-        algorithm = EDivisive()
-        q_values = algorithm.qhat_values(robust_series)
+        algorithm = default_implementation()
+        q_values = algorithm._calculator.calculate_qhat_values(
+            algorithm._calculator.calculate_diffs(robust_series)
+        )
         assert all(np.isclose(expected_result_robust_series, q_values))
 
-    @patch("e_divisive_native_wrapper")
-    def test_fallback(self, mock_native_wrapper, robust_series, expected_result_robust_series):
+    @patch("cext_calculator.C_EXTENSION_LOADED")
+    def test_fallback(self, mock_loaded, robust_series, expected_result_robust_series):
         """
         Test that the fallback algorithm generates the same q values as the original.
         """
-        mock_native_wrapper.LOADED = False
-        algorithm = EDivisive()
-        q_values = algorithm.qhat_values(robust_series)
+        mock_loaded.__bool__.return_value = False
+        algorithm = default_implementation()
+        q_values = algorithm._calculator.calculate_qhat_values(
+            algorithm._calculator.calculate_diffs(robust_series)
+        )
         assert all(np.isclose(expected_result_robust_series, q_values))

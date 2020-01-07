@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 /* public functions */
-int qhat_values(double * series, double *diffs, double * values, int length);
+int qhat_values(double *diffs, double * values, int length);
 int calculate_diffs(double *series, double *diffs, int  length);
 
 /* private functions */
@@ -145,7 +145,7 @@ double term3_reg(double term, int n, int  length){
  * @param length The size of the time series data.
  * @return 0 for success.
  */
-int qhat_values(double * series, double * diffs, double * values, int length){
+int qhat_values(double * diffs, double * values, int length){
     int i;
     int n;
 
