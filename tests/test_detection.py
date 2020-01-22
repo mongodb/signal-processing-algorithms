@@ -2,6 +2,8 @@
 Change points detection related tests.
 """
 import numpy as np
+import pytest
+
 from signal_processing_algorithms.e_divisive import EDivisive
 from signal_processing_algorithms.e_divisive.calculators import cext_calculator
 from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint
@@ -233,3 +235,65 @@ class TestPostRunCheck:
         """
         points, _ = self._test_helper(series=long_series)
         assert 4 == len(points)
+
+
+class TestComputeChangePoints:
+    """
+    Test suite for the PointsModel.compute_change_points class.
+    """
+
+    def _test_helper(self, expected, series):
+        """
+        Helper for simple regression test.
+        """
+        calculator = cext_calculator
+        tester = QHatPermutationsSignificanceTester(
+            pvalue=0.01, permutations=100, calculator=calculator
+        )
+        algo = EDivisive(seed=1234, calculator=calculator, significance_tester=tester)
+        points = algo.get_change_points(series)
+        points = sorted(points, key=lambda point: point.index)
+        assert expected == len(points)
+
+    def test_short(self, short_profile):
+        series = short_profile['series']
+        expected = short_profile['expected']
+        self._test_helper(expected, series)
+
+    def test_small(self, small_profile):
+        series = small_profile['series']
+        expected = small_profile['expected']
+        self._test_helper(expected, series)
+
+    def test_medium(self, medium_profile):
+        series = medium_profile['series']
+        expected = medium_profile['expected']
+        self._test_helper(expected, series)
+
+    # takes ~9 seconds on laptop
+    @pytest.mark.slow
+    def test_large(self, large_profile):
+        series = large_profile['series']
+        expected = large_profile['expected']
+        self._test_helper(expected, series)
+
+    # takes around 90 seconds
+    @pytest.mark.slow
+    def test_very_large(self, very_large_profile):
+        series = very_large_profile['series']
+        expected = very_large_profile['expected']
+        self._test_helper(expected, series)
+
+    # takes around 15 minutes
+    @pytest.mark.slow
+    def test_huge(self, huge_profile):
+        series = huge_profile['series']
+        expected = huge_profile['expected']
+        self._test_helper(expected, series)
+
+    # takes around 2h 15m
+    @pytest.mark.slow
+    def test_humungous(self, humongous_profile):
+        series = humongous_profile['series']
+        expected = humongous_profile['expected']
+        self._test_helper(expected, series)

@@ -27,6 +27,14 @@ Testing stuff:
 ```
 $ pytest --flake8
 ```
+
+Running the slow tests:
+```
+$ pytest --flake8 --runslow
+```
+
+**Some of the larger tests can take a significant amount of time (more than 2 hours).**
+
 Formatting things:
 ```
 $ black setup.py src tests

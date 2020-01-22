@@ -10,9 +10,9 @@ import pytest
 EMPTY_NP_ARRAY = np.array([], dtype=np.float)
 
 
-class TestEDivisiveTIG1423(object):
+class TestEDivisive(object):
     """
-    Test for TIG-1423.
+    Test for EDivisive methods.
     """
 
     def test_ctor_defaults(self):
@@ -22,12 +22,6 @@ class TestEDivisiveTIG1423(object):
         e_divisive = default_implementation()
         assert e_divisive._significance_tester._pvalue is not None
         assert e_divisive._significance_tester._permutations is not None
-
-
-class TestEDivisive(object):
-    """
-    Test for EDivisive class methods.
-    """
 
     def test_series_string(self):
         """

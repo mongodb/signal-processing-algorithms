@@ -54,7 +54,7 @@ class OldEDivisive(object):
 
 class TestAlgorithmContinuity(object):
     """
-    Test PERF-1635 is fixed correctly.
+    Test Algorithm Continuity is correct.
     """
 
     series = np.array([1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3], dtype=np.float)
@@ -109,7 +109,7 @@ class TestAlgorithmContinuity(object):
 
 class TestRobustContinuity:
     """
-    Robust test for PERF-1635.
+    Robust test for Algorithm Continuity.
     """
 
     def test_old_algorithm(self, robust_series, expected_result_robust_series):

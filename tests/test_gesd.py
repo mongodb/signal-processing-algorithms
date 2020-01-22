@@ -79,23 +79,7 @@ class TestSimple(object):
         assert [] == all_z_scores
 
 
-class TestReal(object):
-    """ Test Real data. """
-
-    def test_standard(self, real_series):
-        """Test gesd on real data with standard."""
-        number_outliers, suspicious_indexes, _, _, _ = gesd(real_series)
-        assert 2 == number_outliers
-        assert [90, 4, 27, 88, 37, 64, 126, 78, 74, 47] == suspicious_indexes
-
-    def test_mad(self, mad_series):
-        """Test gesd on real data with Median Absolute Deviation."""
-        number_outliers, suspicious_indexes, _, _, _ = gesd(mad_series, mad=True)
-        assert 2 == number_outliers
-        assert [90, 4, 27, 37, 64, 78, 74, 88, 47, 60] == suspicious_indexes
-
-
-class TestTIG1372(object):
+class TestSimpleData(object):
     """ Test Simple data. """
 
     series = [-1] * 203 + [-2] + [-1] * 75
@@ -116,6 +100,22 @@ class TestTIG1372(object):
         assert [] == test_statistics
         assert [] == critical_values
         assert [] == all_z_scores
+
+
+class TestReal(object):
+    """ Test Real data. """
+
+    def test_standard(self, real_series):
+        """Test gesd on real data with standard."""
+        number_outliers, suspicious_indexes, _, _, _ = gesd(real_series)
+        assert 2 == number_outliers
+        assert [90, 4, 27, 88, 37, 64, 126, 78, 74, 47] == suspicious_indexes
+
+    def test_mad(self, mad_series):
+        """Test gesd on real data with Median Absolute Deviation."""
+        number_outliers, suspicious_indexes, _, _, _ = gesd(mad_series, mad=True)
+        assert 2 == number_outliers
+        assert [90, 4, 27, 37, 64, 78, 74, 88, 47, 60] == suspicious_indexes
 
 
 FIRST_OUTLIER = 700
