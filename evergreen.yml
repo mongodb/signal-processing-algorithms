@@ -46,7 +46,7 @@ tasks:
           working_dir: project
           script: |
             . venv/bin/activate
-            pytest tests --cov=signal_processing_algorithms --cov-fail-under=90 --cov-branch --cov-report=term-missing
+            pytest tests --cov=signal_processing_algorithms --cov-fail-under=90 --cov-branch --cov-report=term-missing --junitxml=test_output_junit.xml
   - name: linting_and_formatting
     commands:
       - command: shell.exec
