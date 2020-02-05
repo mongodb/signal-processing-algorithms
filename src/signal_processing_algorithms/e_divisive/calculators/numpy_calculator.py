@@ -60,14 +60,13 @@ def calculate_qhat_values(diffs: np.ndarray) -> np.ndarray:
     # Each line is preceded by the equivalent list comprehension.
 
     # term1 = sum(diffs[i][j] for i in range(n) for j in range(n, self.window))
-    # See e_divisive.md
     term1 = np.sum(diffs[:n, n:])
 
-    # term2 = sum(diffs[i][k] for i in range(n) for k in range(i + 1, n)) # See e_divisive.md
+    # term2 = sum(diffs[i][k] for i in range(n) for k in range(i + 1, n))
     term2 = np.sum(np.triu(diffs[:n, :n], 0))
 
     # term3 = sum(diffs[j][k] for j in range(n, self.window)
-    #                         for k in range(j + 1, self.window)) # See e_divisive.md
+    #                         for k in range(j + 1, self.window))
     term3 = np.sum(np.triu(diffs[n:, n + 1 :], 0))
 
     qhat_values[n] = _calculate_q(term1, term2, term3, m, n)
