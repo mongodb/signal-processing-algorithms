@@ -1,5 +1,6 @@
 """E-Divisive Numpy Calculator."""
 import numpy as np
+from scipy.special import comb
 
 
 def _calculate_q(
@@ -17,7 +18,7 @@ def _calculate_q(
     :return: The q value generated from the terms.
     """
     term1_reg = cross_term * (2.0 / (x_len * y_len))
-    term2_reg = x_term * (2.0 / (y_len * (y_len - 1)))
+    term2_reg = x_term * (comb(x_len, 2) ** -1)
     term3_reg = y_term * (2.0 / (x_len * (x_len - 1)))
     newq = (x_len * y_len // (x_len + y_len)) * (term1_reg - term2_reg - term3_reg)
     return newq
@@ -48,20 +49,22 @@ def calculate_qhat_values(diffs: np.ndarray) -> np.ndarray:
     # X = {Xi; 0 <= i < tau}
     # Y = {Yj; tau <= j < len(signal) }
     # and look for argmax(tau)Q(tau)
-    tau = 0
 
     # sum |Xi - Yj| for i < tau <= j
     cross_term = 0
     # sum |Xi - Xj| for i < j < tau
     x_term = 0
     # sum |Yi - Yj| for tau <= i < j
-    y_term: float = np.sum(np.triu(diffs))
+    y_term = 0
 
-    qhat_values[tau] = _calculate_q(cross_term, x_term, y_term, tau, len(diffs) - tau)
+    for row in range(0, len(diffs)):
+        y_term += np.sum(diffs[row, row:])
 
-    for tau in range(1, len(diffs)):
-        column_delta = np.sum(diffs[tau, :tau])
-        row_delta = np.sum(diffs[tau:, tau])
+    for tau in range(0, len(diffs)):
+        qhat_values[tau] = _calculate_q(cross_term, x_term, y_term, tau, len(diffs) - tau)
+
+        column_delta = np.sum(diffs[:tau, tau])
+        row_delta = np.sum(diffs[tau, tau:])
 
         cross_term = cross_term - column_delta + row_delta
         x_term = x_term + column_delta
