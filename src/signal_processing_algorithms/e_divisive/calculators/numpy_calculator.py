@@ -17,9 +17,9 @@ def _calculate_q(
 
     :return: The q value generated from the terms.
     """
-    term1_reg = cross_term * (2.0 / (x_len * y_len))
-    term2_reg = x_term * (comb(x_len, 2) ** -1)
-    term3_reg = y_term * (2.0 / (x_len * (x_len - 1)))
+    term1_reg = 0 if x_len < 1 or y_len < 1 else cross_term * (2.0 / (x_len * y_len))
+    term2_reg = 0 if x_len < 2 else x_term * (comb(x_len, 2) ** -1)
+    term3_reg = 0 if y_len < 2 else y_term * (comb(y_len, 2) ** -1)
     newq = (x_len * y_len // (x_len + y_len)) * (term1_reg - term2_reg - term3_reg)
     return newq
 
@@ -69,7 +69,5 @@ def calculate_qhat_values(diffs: np.ndarray) -> np.ndarray:
         cross_term = cross_term - column_delta + row_delta
         x_term = x_term + column_delta
         y_term = y_term - row_delta
-
-        qhat_values[tau] = _calculate_q(cross_term, x_term, y_term, tau, len(diffs) - tau)
 
     return qhat_values

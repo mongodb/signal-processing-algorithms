@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from signal_processing_algorithms.e_divisive import EDivisive
-from signal_processing_algorithms.e_divisive.calculators import cext_calculator
+from signal_processing_algorithms.e_divisive.calculators import numpy_calculator
 from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint
 from signal_processing_algorithms.e_divisive.significance_test import (
     QHatPermutationsSignificanceTester,
@@ -92,7 +92,7 @@ class TestPostRunCheck:
             176,
             250,
         ]
-        calculator = cext_calculator
+        calculator = numpy_calculator
         tester = QHatPermutationsSignificanceTester(
             calculator=calculator, pvalue=0.01, permutations=100
         )
@@ -122,7 +122,7 @@ class TestPostRunCheck:
         if series is None:
             series = np.full(30, 50, dtype=np.int)
             series[15:30] = 100
-        calculator = cext_calculator
+        calculator = numpy_calculator
         tester = QHatPermutationsSignificanceTester(
             pvalue=0.01, permutations=100, calculator=calculator
         )
