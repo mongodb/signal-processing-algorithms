@@ -3,8 +3,8 @@ import numpy as np
 
 
 def _calculate_q(
-        cross_term: np.ndarray, x_term: np.ndarray, y_term: np.ndarray, x_len: int, y_len: int
-) -> np.ndarray:
+        cross_term: float, x_term: float, y_term: float, x_len: int, y_len: int
+) -> float:
     """
     Calculate the q value from the terms and coefficients.
 
@@ -51,11 +51,11 @@ def calculate_qhat_values(diffs: np.ndarray) -> np.ndarray:
     tau = 0
 
     # sum |Xi - Yj| for i < tau <= j
-    cross_term = np.sum(diffs[:tau, tau:])
+    cross_term = 0
     # sum |Xi - Xj| for i < j < tau
-    x_term = np.sum(np.triu(diffs[:tau, :tau]))
+    x_term = 0
     # sum |Yi - Yj| for tau <= i < j
-    y_term = np.sum(np.triu(diffs[tau:, tau:]))
+    y_term: float = np.sum(np.triu(diffs))
 
     qhat_values[tau] = _calculate_q(cross_term, x_term, y_term, tau, len(diffs) - tau)
 
