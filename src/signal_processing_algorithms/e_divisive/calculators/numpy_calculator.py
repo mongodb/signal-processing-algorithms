@@ -55,18 +55,18 @@ def calculate_qhat_values(diffs: np.ndarray) -> np.ndarray:
     # sum |Xi - Xj| for i < j < tau
     x_term = np.sum(np.triu(diffs[:tau, :tau]))
     # sum |Yi - Yj| for tau <= i < j
-    y_term = np.sum(np.triu[tau:, tau:])
+    y_term = np.sum(np.triu(diffs[tau:, tau:]))
 
     qhat_values[tau] = _calculate_q(cross_term, x_term, y_term, tau, len(diffs) - tau)
 
     for tau in range(1, len(diffs)):
-        column_delta = np.sum(diffs[tau - 1, : tau - 1])
-        row_delta = np.sum(diffs[n:, n - 1])
+        column_delta = np.sum(diffs[tau, :tau])
+        row_delta = np.sum(diffs[tau:, tau])
 
-        term1 = term1 - column_delta + row_delta
-        term2 = term2 + column_delta
-        term3 = term3 - row_delta
+        cross_term = cross_term - column_delta + row_delta
+        x_term = x_term + column_delta
+        y_term = y_term - row_delta
 
-        qhat_values[n] = _calculate_q(term1, term2, term3, m, n)
+        qhat_values[tau] = _calculate_q(cross_term, x_term, y_term, tau, len(diffs) - tau)
 
     return qhat_values
