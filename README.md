@@ -26,24 +26,19 @@ $ pip install -r requirements.txt
 ```
 Testing stuff:
 ```
-$ pytest --flake8
+$ pytest
 ```
 
 Running the slow tests:
 ```
-$ pytest --flake8 --runslow
+$ pytest --runslow
 ```
 
 **Some of the larger tests can take a significant amount of time (more than 2 hours).**
 
-Formatting things:
+The linters:
 ```
-$ black setup.py src tests
-```
-
-Doing that stuff automatically before you push to the repo:
-```
-cp scripts/pre-push .git/hooks
+$ pytest src --flake8 --black --pydocstyle --mypy
 ```
 
 ## Intro to E-Divisive
