@@ -3,9 +3,7 @@ import numpy as np
 from scipy.special import comb
 
 
-def _calculate_q(
-        cross_term: float, x_term: float, y_term: float, x_len: int, y_len: int
-) -> float:
+def _calculate_q(cross_term: float, x_term: float, y_term: float, x_len: int, y_len: int) -> float:
     """
     Calculate the q value from the terms and coefficients.
 
