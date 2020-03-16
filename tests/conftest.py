@@ -1,5 +1,6 @@
 import json
 import os
+
 from typing import Any, Callable
 
 import pytest
@@ -77,9 +78,7 @@ def long_series(json_loader):
 
 # http://doc.pytest.org/en/latest/example/simple.html#control-skipping-of-tests-according-to-command-line-option
 def pytest_addoption(parser):
-    parser.addoption(
-        "--runslow", action="store_true", default=False, help="run slow tests"
-    )
+    parser.addoption("--runslow", action="store_true", default=False, help="run slow tests")
 
 
 def pytest_configure(config):

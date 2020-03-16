@@ -1,11 +1,14 @@
 import subprocess
 
-from signal_processing_algorithms import __package_name__, __version__
+import pkg_resources
+
+import signal_processing_algorithms
 
 
 class TestPackageVersion(object):
     def test_version_is_updated(self):
-        pip_command = "pip install {package_name}".format(package_name=__package_name__)
+        package = pkg_resources.get_distribution(signal_processing_algorithms.__name__)
+        pip_command = "pip install {package_name}".format(package_name=package.project_name)
         get_versions_command = (
             pip_command
             + r"==invalidversion 2>&1 \
@@ -16,4 +19,4 @@ class TestPackageVersion(object):
         )
         versions = subprocess.check_output(get_versions_command, shell=True).decode("UTF-8")
         versions = [x for x in versions.split("\n") if len(x) > 0]
-        assert __version__ not in versions
+        assert package.version not in versions

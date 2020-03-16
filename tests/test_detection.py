@@ -256,44 +256,44 @@ class TestComputeChangePoints:
         assert expected == len(points)
 
     def test_short(self, short_profile):
-        series = short_profile['series']
-        expected = short_profile['expected']
+        series = short_profile["series"]
+        expected = short_profile["expected"]
         self._test_helper(expected, series)
 
     def test_small(self, small_profile):
-        series = small_profile['series']
-        expected = small_profile['expected']
+        series = small_profile["series"]
+        expected = small_profile["expected"]
         self._test_helper(expected, series)
 
     def test_medium(self, medium_profile):
-        series = medium_profile['series']
-        expected = medium_profile['expected']
+        series = medium_profile["series"]
+        expected = medium_profile["expected"]
         self._test_helper(expected, series)
 
     # takes ~9 seconds on laptop
     @pytest.mark.slow
     def test_large(self, large_profile):
-        series = large_profile['series']
-        expected = large_profile['expected']
+        series = large_profile["series"]
+        expected = large_profile["expected"]
         self._test_helper(expected, series)
 
     # takes around 90 seconds
     @pytest.mark.slow
     def test_very_large(self, very_large_profile):
-        series = very_large_profile['series']
-        expected = very_large_profile['expected']
+        series = very_large_profile["series"]
+        expected = very_large_profile["expected"]
         self._test_helper(expected, series)
 
     # takes around 15 minutes
     @pytest.mark.slow
     def test_huge(self, huge_profile):
-        series = huge_profile['series']
-        expected = huge_profile['expected']
+        series = huge_profile["series"]
+        expected = huge_profile["expected"]
         self._test_helper(expected, series)
 
     # takes around 2h 15m
     @pytest.mark.slow
     def test_humungous(self, humongous_profile):
-        series = humongous_profile['series']
-        expected = humongous_profile['expected']
+        series = humongous_profile["series"]
+        expected = humongous_profile["expected"]
         self._test_helper(expected, series)

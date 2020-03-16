@@ -2,6 +2,7 @@
 from typing import Iterable
 
 import numpy as np
+
 from typing_extensions import Protocol, runtime_checkable
 
 from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint

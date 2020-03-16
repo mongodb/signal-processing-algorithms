@@ -1,8 +1,11 @@
-from sys import platform
+"""Build script for project installation."""
+import platform
+
+from typing import Dict
 
 from setuptools import Extension
 
-ext_modules=[
+ext_modules = [
     Extension(
         "signal_processing_algorithms.e_divisive.calculators._e_divisive",
         sources=["./src/signal_processing_algorithms/e_divisive/calculators/e_divisive.c"],
@@ -12,10 +15,7 @@ ext_modules=[
     )
 ]
 
-def build(setup_kwargs):
-    """
-    This function is mandatory in order to build the extensions.
-    """
-    setup_kwargs.update(
-        {"ext_modules": ext_modules}
-    )
+
+def build(setup_kwargs: Dict) -> None:
+    """Build the extensions."""
+    setup_kwargs.update({"ext_modules": ext_modules})

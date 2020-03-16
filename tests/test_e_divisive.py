@@ -2,10 +2,10 @@
 E-Divisive related tests.
 """
 import numpy as np
+import pytest
 
 from signal_processing_algorithms.e_divisive import default_implementation
 from signal_processing_algorithms.e_divisive.calculators.cext_calculator import C_EXTENSION_LOADED
-import pytest
 
 EMPTY_NP_ARRAY = np.array([], dtype=np.float)
 

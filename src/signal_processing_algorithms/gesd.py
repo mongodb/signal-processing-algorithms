@@ -6,12 +6,14 @@ Generalized ESD Test for Outliers
 see 'GESD<https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm>'
 """
 import collections
+
 from typing import List
 
-from scipy.stats import t
 import numpy as np
 import numpy.ma as ma
 import structlog
+
+from scipy.stats import t
 
 LOG = structlog.get_logger()
 

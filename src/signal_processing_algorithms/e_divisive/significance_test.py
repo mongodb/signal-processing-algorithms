@@ -1,12 +1,14 @@
-"""Significance Tester for E-Divisive"""
+"""Significance Tester for E-Divisive."""
 import copy
 import random
+
 from typing import Iterable
 
 import numpy as np
+
 from more_itertools import pairwise
 
-from signal_processing_algorithms.e_divisive.base import SignificanceTester, EDivisiveCalculator
+from signal_processing_algorithms.e_divisive.base import EDivisiveCalculator, SignificanceTester
 from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint
 
 
