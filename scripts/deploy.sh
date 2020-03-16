@@ -21,7 +21,7 @@ username=$1
 password=$2
 repo=$3
 
-python setup.py sdist bdist_wheel
+python build.py sdist bdist_wheel
 rc=$?
 
 if [ $rc -ne 0 ]; then
@@ -31,7 +31,7 @@ fi
 
 twine upload --username $username --password $password --repository-url $repo dist/*
 
-git tag $(python setup.py --version)
+git tag $(python build.py --version)
 git push --tags
 
 exit $?
