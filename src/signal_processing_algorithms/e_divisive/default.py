@@ -1,8 +1,8 @@
 """Default implementations for E-Divisive."""
 
 from signal_processing_algorithms.e_divisive.base import EDivisiveCalculator
+from signal_processing_algorithms.e_divisive.calculators import cext_calculator, numpy_calculator
 from signal_processing_algorithms.e_divisive.e_divisive import EDivisive
-from signal_processing_algorithms.e_divisive.calculators import numpy_calculator, cext_calculator
 from signal_processing_algorithms.e_divisive.significance_test import (
     QHatPermutationsSignificanceTester,
 )

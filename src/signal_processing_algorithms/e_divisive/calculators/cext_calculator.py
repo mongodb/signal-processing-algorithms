@@ -1,8 +1,9 @@
 """C Extension E-Divisive calculator."""
+import os
+
 from ctypes import c_int
 
 import numpy as np
-import os
 import structlog
 
 LOG = structlog.get_logger()

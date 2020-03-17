@@ -24,6 +24,12 @@ class EDivisiveChangePoint:
     probability: Optional[float]
 
     def __eq__(self, other: object) -> bool:
+        """
+        Check whether one change point is equal to another based on index, qhat, and probability.
+
+        :param other: The other change point.
+        :return: True if they are equal, false otherwise.
+        """
         if not isinstance(other, EDivisiveChangePoint):
             return False
         return (

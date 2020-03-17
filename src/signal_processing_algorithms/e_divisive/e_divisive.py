@@ -1,14 +1,16 @@
 """Computes the E-Divisive means change points."""
 from __future__ import annotations
-from typing import List, Dict, Tuple, Union, Optional, Iterable
+
+from typing import Dict, Iterable, List, Optional, Tuple, Union
 
 import numpy as np
 import structlog
+
 from more_itertools import pairwise
 
-from signal_processing_algorithms.e_divisive.base import SignificanceTester, EDivisiveCalculator
-from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint
 from signal_processing_algorithms.determinism import deterministic_random
+from signal_processing_algorithms.e_divisive.base import EDivisiveCalculator, SignificanceTester
+from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint
 
 LOG = structlog.get_logger()
 

@@ -15,7 +15,7 @@ pip-wheel-metadata/
 *.log
 *.xml
 
-# Created by setup.py
+# Created by build.py
 *.egg-info/
 /build
 /dist

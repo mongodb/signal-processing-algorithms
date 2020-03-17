@@ -5,7 +5,6 @@ buildvariants:
       - ubuntu1604-test
     tasks:
       - name: unit_tests
-      - name: linting_and_formatting
       - name: deploy
 functions:
   create virtualenv:
@@ -13,7 +12,13 @@ functions:
       params:
         working_dir: project
         script: |
-          ./scripts/create_virtualenv ${pypi_user} ${pypi_password} ${pypi_url}'/simple'
+          set -o errexit
+          set -o verbose
+
+          /opt/mongodbtoolchain/v3/bin/python3 -m venv venv
+          . venv/bin/activate
+          pip install poetry
+          poetry install
   deploy:
     - command: shell.exec
       params:
@@ -22,13 +27,12 @@ functions:
           set -o errexit
           . venv/bin/activate
 
-
           if [ "${is_patch}" = "true" ]; then
             # Do not deploy on patches.
             exit 0
           fi
 
-          scripts/deploy.sh ${pypi_user} ${pypi_password} 'https://'${pypi_url}
+          poetry publish --build --username ${pypi_user} --password ${pypi_password}
 pre:
   - command: git.get_project
     params:
@@ -46,19 +50,10 @@ tasks:
           working_dir: project
           script: |
             . venv/bin/activate
-            pytest tests --cov=signal_processing_algorithms --cov-fail-under=90 --cov-branch --cov-report=term-missing --junitxml=test_output_junit.xml
-  - name: linting_and_formatting
-    commands:
-      - command: shell.exec
-        params:
-          working_dir: project
-          script: |
-            . venv/bin/activate
-            pytest src --flake8 --black --pydocstyle --mypy
+            poetry run pytest --junitxml=test_output_junit.xml
   - name: deploy
     depends_on:
       - name: unit_tests
-      - name: linting_and_formatting
     patchable: false
     commands:
       - func: deploy
