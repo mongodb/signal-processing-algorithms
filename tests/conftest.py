@@ -72,6 +72,11 @@ def expected_result_robust_series(json_loader):
 
 
 @pytest.fixture
+def expected_result_robust_series_proper_division(json_loader):
+    return json_loader("expected_result_robust_series_proper_division")
+
+
+@pytest.fixture
 def long_series(json_loader):
     return json_loader("long_series")
 

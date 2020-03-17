@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from signal_processing_algorithms.e_divisive import EDivisive
-from signal_processing_algorithms.e_divisive.calculators import cext_calculator
+from signal_processing_algorithms.e_divisive.calculators import cext_calculator, numpy_calculator
 from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint
 from signal_processing_algorithms.e_divisive.significance_test import (
     QHatPermutationsSignificanceTester,
@@ -92,28 +92,22 @@ class TestPostRunCheck:
             176,
             250,
         ]
-        calculator = cext_calculator
+        calculator = numpy_calculator
         tester = QHatPermutationsSignificanceTester(
             calculator=calculator, pvalue=0.01, permutations=100
         )
         algo = EDivisive(seed=1234, calculator=calculator, significance_tester=tester)
         points = algo.get_change_points(series)
 
-        assert 3 == len(points)
+        assert 2 == len(points)
 
-        expected = EDivisiveChangePoint(index=40, qhat=2776.9140350877196, probability=0.0)
+        expected = EDivisiveChangePoint(index=40, qhat=2848.1169590643276, probability=0.0)
 
         assert expected == points[0]
 
         expected = EDivisiveChangePoint(index=20, qhat=893.578947368421, probability=0.0)
 
         assert expected == points[1]
-
-        expected = EDivisiveChangePoint(
-            index=50, qhat=167.66666666666666, probability=0.009900990099009901
-        )
-
-        assert expected == points[2]
 
     def _test_helper(self, series=None):
         """
@@ -122,7 +116,7 @@ class TestPostRunCheck:
         if series is None:
             series = np.full(30, 50, dtype=np.int)
             series[15:30] = 100
-        calculator = cext_calculator
+        calculator = numpy_calculator
         tester = QHatPermutationsSignificanceTester(
             pvalue=0.01, permutations=100, calculator=calculator
         )
@@ -174,7 +168,7 @@ class TestPostRunCheck:
         points, state = self._test_helper(series=series)
 
         assert 1 == len(points)
-        kwargs = {"index": 15, "qhat": 606.6666666666666, "probability": 0.0}
+        kwargs = {"index": 15, "qhat": 649.9999999999999, "probability": 0.0}
         expected = EDivisiveChangePoint(**kwargs)
         assert expected == points[0]
 
@@ -190,11 +184,11 @@ class TestPostRunCheck:
 
         points, state = self._test_helper(series=series)
         assert 2 == len(points)
-        kwargs = {"index": 15, "qhat": 532.636165577342, "probability": 0.0}
+        kwargs = {"index": 15, "qhat": 544.7415329768271, "probability": 0.0}
         expected = EDivisiveChangePoint(**kwargs)
         assert points[0] == expected
 
-        kwargs = {"index": 33, "qhat": 206.06060606060612, "probability": 0.0}
+        kwargs = {"index": 33, "qhat": 226.66666666666674, "probability": 0.0}
         expected = EDivisiveChangePoint(**kwargs)
         assert points[1] == expected
 
@@ -213,7 +207,7 @@ class TestPostRunCheck:
 
         assert 2 == len(points)
 
-        kwargs = {"index": 15, "qhat": 606.6666666666666, "probability": 0.0}
+        kwargs = {"index": 15, "qhat": 649.9999999999999, "probability": 0.0}
         expected = EDivisiveChangePoint(**kwargs)
         assert expected == points[0]
 
