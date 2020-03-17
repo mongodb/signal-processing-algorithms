@@ -78,8 +78,21 @@ class TestAlgorithmContinuity(object):
         dtype=np.float,
     )
     expected_proper_division = np.array(
-        [0, 1.03333333, 2.2962963, 3.875, 5.9047619, 4.33333333, 3.6, 3.41666667, 3.80952381, 5.25,
-         3.11111111, 1.4])
+        [
+            0,
+            1.03333333,
+            2.2962963,
+            3.875,
+            5.9047619,
+            4.33333333,
+            3.6,
+            3.41666667,
+            3.80952381,
+            5.25,
+            3.11111111,
+            1.4,
+        ]
+    )
 
     def test_old_algorithm(self):
         """
@@ -136,8 +149,9 @@ class TestRobustContinuity:
         assert all(np.isclose(expected_result_robust_series, q_values))
 
     @patch("cext_calculator.C_EXTENSION_LOADED")
-    def test_fallback(self, mock_loaded, robust_series,
-                      expected_result_robust_series_proper_division):
+    def test_fallback(
+        self, mock_loaded, robust_series, expected_result_robust_series_proper_division
+    ):
         """
         Test that the fallback algorithm generates the same q values as the original.
         """

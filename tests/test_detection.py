@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from signal_processing_algorithms.e_divisive import EDivisive
-from signal_processing_algorithms.e_divisive.calculators import numpy_calculator, cext_calculator
+from signal_processing_algorithms.e_divisive.calculators import cext_calculator, numpy_calculator
 from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint
 from signal_processing_algorithms.e_divisive.significance_test import (
     QHatPermutationsSignificanceTester,
@@ -108,7 +108,6 @@ class TestPostRunCheck:
         expected = EDivisiveChangePoint(index=20, qhat=893.578947368421, probability=0.0)
 
         assert expected == points[1]
-
 
     def _test_helper(self, series=None):
         """
