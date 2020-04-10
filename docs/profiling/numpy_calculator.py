@@ -5,7 +5,7 @@ from signal_processing_algorithms.e_divisive.calculators import numpy_calculator
 
 class NumpyCalculator(EDivisiveCalculator):
     """
-    Numpy O(n^2) implementation.
+    Numpy O(n^2) implementation. Only used for profiling, don't use this in production!
     """
 
     @staticmethod

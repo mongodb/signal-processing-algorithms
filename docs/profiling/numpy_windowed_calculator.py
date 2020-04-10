@@ -4,6 +4,7 @@ from signal_processing_algorithms.e_divisive.calculators import numpy_calculator
 
 
 class NumpyWindowedCalculator(EDivisiveCalculator):
+    """Only used for profiling, don't use this in production!"""
 
     @staticmethod
     def calculate_diffs(series: np.ndarray) -> np.ndarray:
