@@ -1,0 +1,8 @@
+version: '3'
+services:
+  jupyter_playground:
+    build: .
+    ports:
+      - '8888:8888'
+    volumes:
+      - './profiling:/home/jovyan/profiling'

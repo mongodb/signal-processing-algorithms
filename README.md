@@ -110,3 +110,16 @@ algo = EDivisive(calculator=calculator, significance_tester=tester)
 
 change_points = algo.get_change_points(series)
 ```
+
+## Interactive Documentation
+
+In addition to the package itself and this readme, we have a set of interactive documents that you can use to recreate experiments and investigations of this package, play with them, and make your own!
+
+The requirement for running these documents are:
+* Docker
+* Docker Compose
+
+Once you have these, simply navigate to [`$REPO/docs`](./docs), execute `docker-compose up` and follow the link!
+
+You can also view these documents in non-interactive form w/o docker+compose:
+* [Profiling](./docs/profiling/algorithm_implementations.ipynb)

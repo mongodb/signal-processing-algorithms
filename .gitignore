@@ -27,3 +27,5 @@ pip-wheel-metadata/
 .mypy_cache/
 
 secrets.*
+
+.ipynb*/
