@@ -1,0 +1,20 @@
+name: Publish Python Package
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Publish Package
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build and Publish Python Package
+      uses: ./  # Use action in the root directory.
+      id: publish
+      with:
+        pypi-username: ${{ secrets.PYPI_USERNAME }}
+        pypi-password: ${{ secrets.PYPI_PASSWORD }}
