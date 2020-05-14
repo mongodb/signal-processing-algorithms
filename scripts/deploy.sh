@@ -14,4 +14,4 @@ poetry build
 find ./dist -name "*.whl" | xargs auditwheel repair
 rm dist/*.whl
 mv wheelhouse/* dist
-echo poetry publish --username $PYPI_USERNAME --password $PYPI_PASSWORD
+poetry publish --username $PYPI_USERNAME --password $PYPI_PASSWORD
