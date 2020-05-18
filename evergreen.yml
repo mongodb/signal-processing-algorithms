@@ -5,7 +5,6 @@ buildvariants:
       - ubuntu1604-test
     tasks:
       - name: unit_tests
-      - name: deploy
 functions:
   create virtualenv:
     - command: shell.exec
@@ -19,20 +18,6 @@ functions:
           . venv/bin/activate
           pip install poetry
           poetry install
-  deploy:
-    - command: shell.exec
-      params:
-        working_dir: project
-        script: |
-          set -o errexit
-          . venv/bin/activate
-
-          if [ "${is_patch}" = "true" ]; then
-            # Do not deploy on patches.
-            exit 0
-          fi
-
-          poetry publish --build --username ${pypi_user} --password ${pypi_password}
 pre:
   - command: git.get_project
     params:
@@ -51,9 +36,3 @@ tasks:
           script: |
             . venv/bin/activate
             poetry run pytest --junitxml=test_output_junit.xml
-  - name: deploy
-    depends_on:
-      - name: unit_tests
-    patchable: false
-    commands:
-      - func: deploy

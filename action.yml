@@ -1,0 +1,15 @@
+name: "Build and Publish Python Package"
+description: "Build and publish a python package with C extension support"
+inputs:
+  pypi-username: 
+    description: Username of Pypi account to publish to.
+    required: true
+  pypi-password:
+    description: Password of Pypi account to publish to.
+    required: true
+runs:
+  using: docker
+  image: Dockerfile
+  env: 
+    PYPI_USERNAME: ${{ inputs.pypi-username }}
+    PYPI_PASSWORD: ${{ inputs.pypi-password }}
