@@ -5,16 +5,15 @@ on:
       - master
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     name: Run Tests/Linters
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Fred
-        uses: abatilo/actions-poetry@v1.0.0
+      - name: Install
+        uses: abatilo/actions-poetry@v1.5.0
         with:
-          python_version: 3.8.0
-          poetry_version: 0.12.17
+          python_version: 3.7
           args: install
       - name: Test
         run: poetry run pytest
