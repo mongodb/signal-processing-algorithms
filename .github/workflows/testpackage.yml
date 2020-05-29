@@ -10,11 +10,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: test
-        run: pip -V
       - name: Install
         run: |
-          pip install poetry
+          pip3 install poetry
           poetry install
       - name: Test
         run: poetry run pytest
