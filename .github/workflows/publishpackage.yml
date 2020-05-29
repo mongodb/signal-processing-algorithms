@@ -1,19 +1,24 @@
 name: Publish Python Package
-
-on: 
+on:
   push:
     branches:
       - master
-
 jobs:
+  test:
+    runs-on: ubuntu-18.04
+    name: Run Tests/Linters
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
   deploy:
+    needs: test
     runs-on: ubuntu-18.04
     name: Publish Package
     steps:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Build and Publish Python Package
-      uses: ./  # Use action in the root directory.
+      uses: ./.github/actions/deploy  # Use action in the root directory.
       id: publish
       with:
         pypi-username: ${{ secrets.PYPI_USERNAME }}
