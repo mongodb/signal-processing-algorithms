@@ -1,4 +1,4 @@
-name: Publish Python Package
+name: Test Python Package
 on:
   pull_request:
     branches:

@@ -10,6 +10,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Install
+        run:
+          pip install poetry
+          poetry install
+      - name: Test
+        run:
+          poetry run pytest
   deploy:
     needs: test
     runs-on: ubuntu-18.04
