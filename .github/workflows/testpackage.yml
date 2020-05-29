@@ -11,9 +11,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install
-        run:
+        run: |
           pip install poetry
           poetry install
       - name: Test
-        run:
-          poetry run pytest
+        run: poetry run pytest
