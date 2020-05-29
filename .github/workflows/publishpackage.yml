@@ -11,9 +11,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install
-        run: |
-          pip3 install poetry
-          poetry install
+        uses: abatilo/actions-poetry@v1.5.0
+        with:
+          python_version: 3.7
+          args: install
       - name: Test
         run: poetry run pytest
   deploy:
