@@ -13,7 +13,8 @@ jobs:
       - name: Fred
         uses: abatilo/actions-poetry@v1.0.0
         with:
-          python_version: 3.7
+          python_version: 3.8.0
+          poetry_version: 0.12.17
           args: install
       - name: Test
         run: poetry run pytest
