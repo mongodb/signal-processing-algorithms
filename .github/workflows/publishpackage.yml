@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install
+      - name: Fred
         uses: abatilo/actions-poetry@v1.0.0
         with:
           python_version: 3.7
