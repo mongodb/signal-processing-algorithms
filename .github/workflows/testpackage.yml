@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: test
-        run: python -V
+        run: pip -V
       - name: Install
         run: |
           pip install poetry
