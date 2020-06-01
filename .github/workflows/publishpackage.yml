@@ -27,7 +27,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Build and Publish Python Package
-      uses: ./.github/actions/deploy  # Use action in the root directory.
+      uses: ./  # Use action in the root directory.
       id: publish
       with:
         pypi-username: ${{ secrets.PYPI_USERNAME }}
