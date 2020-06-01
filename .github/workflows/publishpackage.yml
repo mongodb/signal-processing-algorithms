@@ -16,7 +16,9 @@ jobs:
           source $HOME/.poetry/env
           poetry install
       - name: Test
-        run: poetry run pytest
+        run: |
+          source $HOME/.poetry/env
+          poetry run pytest
   deploy:
     needs: test
     runs-on: ubuntu-18.04
