@@ -17,29 +17,22 @@ $ git clone git@github.com:mongodb/signal-processing-algorithms.git
 $ cd signal-processing-algorithms
 ```
 
-Making a virtual environment and installing the stuff you need into it:
+Installation
 ```
-$ virtualenv -p python3 venv
-$ source venv/bin/activate
-$ pip install -e .
-$ pip install -r requirements.txt
+$ pip install poetry
+$ poetry install
 ```
-Testing stuff:
+Testing/linting:
 ```
-$ pytest
+$ poetry run pytest
 ```
 
 Running the slow tests:
 ```
-$ pytest --runslow
+$ poetry run pytest --runslow
 ```
 
 **Some of the larger tests can take a significant amount of time (more than 2 hours).**
-
-The linters:
-```
-$ pytest src --flake8 --black --pydocstyle --mypy
-```
 
 ## Intro to E-Divisive
 
