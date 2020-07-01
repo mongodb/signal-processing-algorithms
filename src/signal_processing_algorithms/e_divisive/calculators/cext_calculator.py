@@ -1,7 +1,7 @@
 """C Extension E-Divisive calculator."""
 import os
 
-from ctypes import c_int
+from ctypes import c_bool, c_int
 
 import numpy as np
 import structlog
@@ -20,11 +20,11 @@ try:
     LIB_E_DIVISIVE = np.ctypeslib.load_library("_e_divisive", so_path)
 
     # setup the return types and argument types
-    LIB_E_DIVISIVE.qhat_values.restype = c_int
+    LIB_E_DIVISIVE.qhat_values.restype = c_bool
     LIB_E_DIVISIVE.qhat_values.argtypes = [MATRIX_DOUBLE, ARRAY_DOUBLE, c_int]
 
     # setup the return types and argument types
-    LIB_E_DIVISIVE.calculate_diffs.restype = c_int
+    LIB_E_DIVISIVE.calculate_diffs.restype = c_bool
     LIB_E_DIVISIVE.calculate_diffs.argtypes = [ARRAY_DOUBLE, MATRIX_DOUBLE, c_int]
 
     def calculate_diffs(series: np.ndarray) -> np.ndarray:
@@ -39,7 +39,7 @@ try:
         size = len(series)
         diffs = np.zeros((size, size), dtype=np.float)
         result = LIB_E_DIVISIVE.calculate_diffs(series, diffs, size)
-        if result != 0:
+        if result is not True:
             raise Exception("Native E-Divisive returned unexpected value {}".format(result))
 
         return diffs
@@ -56,7 +56,7 @@ try:
         result = LIB_E_DIVISIVE.qhat_values(
             np.ascontiguousarray(diffs, dtype=np.float), qhat_values, size
         )
-        if result != 0:
+        if result is not True:
             raise Exception("Native E-Divisive returned unexpected value {}".format(result))
 
         return qhat_values
