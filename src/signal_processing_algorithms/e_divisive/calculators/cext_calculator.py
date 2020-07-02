@@ -1,7 +1,7 @@
 """C Extension E-Divisive calculator."""
 import os
 
-from ctypes import c_bool, c_int
+from ctypes import c_bool, c_int, c_double
 
 import numpy as np
 import structlog
@@ -27,6 +27,42 @@ try:
     LIB_E_DIVISIVE.calculate_diffs.restype = c_bool
     LIB_E_DIVISIVE.calculate_diffs.argtypes = [ARRAY_DOUBLE, MATRIX_DOUBLE, c_int]
 
+    # setup the return types and argument types
+    LIB_E_DIVISIVE.square_sum.restype = c_double
+    LIB_E_DIVISIVE.square_sum.argtypes = [MATRIX_DOUBLE, c_int, c_int, c_int, c_int, c_int]
+
+    # setup the return types and argument types
+    LIB_E_DIVISIVE.calculate_q.restype = c_double
+    LIB_E_DIVISIVE.calculate_q.argtypes = [c_double, c_double, c_double, c_int, c_int]
+
+
+    def _calculate_q(cross_term: float, x_term: float, y_term: float, x_len: int,
+                     y_len: int) -> float:
+        result = LIB_E_DIVISIVE.calculate_q(cross_term, x_term, y_term, x_len, y_len)
+        return result
+
+
+    def _square_sum(matrix: np.ndarray, row_start: int, row_end: int, column_start: int,
+                    column_end: int) -> float:
+        """
+        Calculate the sum of elements in an NxN matrix bounded by [row_start, row_end)x[column_start, column_end).
+
+        :param column_end: Ending of the columns.
+        :param column_start: Beginning of the columns.
+        :param row_end: Ending of the rows.
+        :param row_start: Beginning of the columns.
+        :param matrix: The matrix.
+        :return: The sum of values.
+        """
+        size = len(matrix)
+        result = LIB_E_DIVISIVE.square_sum(
+            np.ascontiguousarray(matrix, dtype=np.float), size, row_start, row_end, column_start,
+            column_end
+        )
+
+        return result
+
+
     def calculate_diffs(series: np.ndarray) -> np.ndarray:
         """
         Marshall the parameters and call the native qhat_values function.
@@ -44,6 +80,7 @@ try:
 
         return diffs
 
+
     def calculate_qhat_values(diffs: np.ndarray) -> np.ndarray:
         """
         Marshall the parameters and call the native qhat_values function.
@@ -60,6 +97,7 @@ try:
             raise Exception("Native E-Divisive returned unexpected value {}".format(result))
 
         return qhat_values
+
 
     C_EXTENSION_LOADED = True
 except OSError:

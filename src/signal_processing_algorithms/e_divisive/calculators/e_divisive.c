@@ -7,10 +7,9 @@
 /* public functions */
 bool qhat_values(double *diffs, double * values, int length);
 bool calculate_diffs(double *series, double *diffs, int length);
+double calculate_q(double cross_term, double x_term, double y_term, int x_len, int y_len);
+double square_sum(double * diffs, int length, int row_start, int row_end, int column_start, int column_end);
 
-/* private functions */
-static double calculate_q(double cross_term, double x_term, double y_term, int x_len, int y_len);
-static double square_sum(double * diffs, int length, int row_start, int row_end, int column_start, int column_end);
 
 /**
  * Calculate the diffs from the input series.
