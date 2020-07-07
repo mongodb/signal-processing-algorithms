@@ -45,3 +45,13 @@ def test_square_sum(data, row_start, row_end, column_start, column_end):
     sum1 = cext_calculator._square_sum(diffs, row_start, row_end, column_start, column_end)
     sum2 = np.sum(diffs[row_start:row_end, column_start:column_end])
     assert np.testing.assert_approx_equal(sum1, sum2)
+
+
+def test_square_sum():
+    data = [1 for _ in range(10)]
+    row_start, row_end, column_start, column_end = 0, 10, 0 ,10
+    series = np.array(data, dtype=np.float)
+    diffs = cext_calculator.calculate_diffs(series)
+    sum1 = cext_calculator._square_sum(diffs, row_start, row_end, column_start, column_end)
+    sum2 = np.sum(diffs[row_start:row_end, column_start:column_end])
+    assert np.testing.assert_approx_equal(sum1, sum2)

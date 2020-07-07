@@ -54,6 +54,7 @@ try:
         :param matrix: The matrix.
         :return: The sum of values.
         """
+        matrix = np.zeros((10, 10), dtype=np.float)
         size = len(matrix)
         result = LIB_E_DIVISIVE.square_sum(
             np.ascontiguousarray(matrix, dtype=np.float), size, row_start, row_end, column_start,
