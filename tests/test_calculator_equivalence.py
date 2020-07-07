@@ -16,13 +16,13 @@ def test_diff_equivalence(data):
     assert np.array_equal(np_res, cext_res)
 
 
-@given(lists(floats(0, 1000, allow_infinity=False, allow_nan=False), min_size=10, max_size=1000))
+@given(lists(floats(0, 1000, allow_infinity=False, allow_nan=False), min_size=100, max_size=1000))
 def test_q_values(data):
     series = np.array(data, dtype=float)
     diffs = numpy_calculator.calculate_diffs(series)
     np_res = numpy_calculator.calculate_qhat_values(diffs)
     cext_res = cext_calculator.calculate_qhat_values(diffs)
-    assert np.array_equal(np_res, cext_res)
+    np.testing.assert_array_almost_equal(np_res, cext_res, 5)
 
 
 @given(floats(0, 1000, allow_infinity=False, allow_nan=False),
@@ -35,8 +35,8 @@ def test_calculate_q(cross_term, x_term, y_term, x_len, y_len):
     assert q1 == q2
 
 
-@given(lists(floats(0, 1000, allow_infinity=False, allow_nan=False), min_size=10, max_size=1000),
-       integers(0, 1000), integers(0, 1000), integers(0, 1000), integers(0, 1000))
+@given(lists(floats(0, 1000, allow_infinity=False, allow_nan=False), min_size=100, max_size=1000),
+       integers(0, 100), integers(0, 100), integers(0, 100), integers(0, 100))
 def test_square_sum(data, row_start, row_end, column_start, column_end):
     assume(row_start <= row_end)
     assume(column_start <= column_end)
@@ -44,14 +44,4 @@ def test_square_sum(data, row_start, row_end, column_start, column_end):
     diffs = cext_calculator.calculate_diffs(series)
     sum1 = cext_calculator._square_sum(diffs, row_start, row_end, column_start, column_end)
     sum2 = np.sum(diffs[row_start:row_end, column_start:column_end])
-    assert np.testing.assert_approx_equal(sum1, sum2)
-
-
-def test_square_sum():
-    data = [1 for _ in range(10)]
-    row_start, row_end, column_start, column_end = 0, 10, 0 ,10
-    series = np.array(data, dtype=np.float)
-    diffs = cext_calculator.calculate_diffs(series)
-    sum1 = cext_calculator._square_sum(diffs, row_start, row_end, column_start, column_end)
-    sum2 = np.sum(diffs[row_start:row_end, column_start:column_end])
-    assert np.testing.assert_approx_equal(sum1, sum2)
+    np.testing.assert_almost_equal(sum1, sum2, 5)

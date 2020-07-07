@@ -34,7 +34,7 @@ try:
     # setup the return types and argument types
     LIB_E_DIVISIVE.calculate_q.restype = c_double
     LIB_E_DIVISIVE.calculate_q.argtypes = [c_double, c_double, c_double, c_int, c_int]
-
+    
 
     def _calculate_q(cross_term: float, x_term: float, y_term: float, x_len: int,
                      y_len: int) -> float:
@@ -54,7 +54,6 @@ try:
         :param matrix: The matrix.
         :return: The sum of values.
         """
-        matrix = np.zeros((10, 10), dtype=np.float)
         size = len(matrix)
         result = LIB_E_DIVISIVE.square_sum(
             np.ascontiguousarray(matrix, dtype=np.float), size, row_start, row_end, column_start,

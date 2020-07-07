@@ -110,7 +110,7 @@ class TestAlgorithmContinuity(object):
         q_values = algorithm._calculator.calculate_qhat_values(
             algorithm._calculator.calculate_diffs(self.series)
         )
-        assert all(np.isclose(self.expected, q_values))
+        assert all(np.isclose(self.expected_proper_division, q_values))
 
     @patch("cext_calculator.C_EXTENSION_LOADED")
     def test_fallback(self, mock_loaded):
@@ -138,7 +138,7 @@ class TestRobustContinuity:
         q_values = algorithm.qs(robust_series)
         assert all(np.isclose(expected_result_robust_series, q_values))
 
-    def test_q_values(self, robust_series, expected_result_robust_series):
+    def test_q_values(self, robust_series, expected_result_robust_series_proper_division):
         """
         Test that the current algorithm generates the same q values as the original.
         """
@@ -146,7 +146,7 @@ class TestRobustContinuity:
         q_values = algorithm._calculator.calculate_qhat_values(
             algorithm._calculator.calculate_diffs(robust_series)
         )
-        assert all(np.isclose(expected_result_robust_series, q_values))
+        assert all(np.isclose(expected_result_robust_series_proper_division, q_values))
 
     @patch("cext_calculator.C_EXTENSION_LOADED")
     def test_fallback(

@@ -10,7 +10,6 @@ bool calculate_diffs(double *series, double *diffs, int length);
 double calculate_q(double cross_term, double x_term, double y_term, int x_len, int y_len);
 double square_sum(double * diffs, int length, int row_start, int row_end, int column_start, int column_end);
 
-
 /**
  * Calculate the diffs from the input series.
  *
@@ -81,10 +80,10 @@ double calculate_q(double cross_term, double x_term, double y_term, int x_len, i
 double square_sum(double * diffs, int length, int row_start, int row_end, int column_start, int column_end) {
     int row;
     int column;
-    double sum;
+    double sum = 0.0;
     for(row=row_start;row<row_end;row++) {
         for(column=column_start;column<column_end;column++) {
-            sum += diffs[row * length + column];
+            sum = sum + diffs[row * length + column];
         }
     }
     return sum;
