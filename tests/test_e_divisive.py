@@ -35,3 +35,13 @@ class TestEDivisive(object):
         Test that the native implementation of e_divisive is included in the package
         """
         assert C_EXTENSION_LOADED
+
+    def test_default_implementation_sanity(self):
+        algo = default_implementation()
+        for cp in range(4, 100):
+            assert algo.fit_predict([0] * cp + [1] * cp) == [cp]
+
+    def test_absolute_certainty(self):
+        algo = default_implementation()
+        algo._significance_tester._pvalue = 0
+        assert algo.fit_predict([0] * 100 + [1] * 100) == [100]
