@@ -65,6 +65,7 @@ class EDivisive:
     def _reset_change_points(self) -> None:
         self._change_points.clear()
         self._sorted_change_points.clear()
+        self._memoized_change_points = {}
         self._calculated = False
 
     def _calculate_best_change_point(self) -> EDivisiveChangePoint:
