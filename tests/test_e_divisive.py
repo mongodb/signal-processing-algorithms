@@ -36,6 +36,11 @@ class TestEDivisive(object):
         """
         assert C_EXTENSION_LOADED
 
+    def test_absolute_certainty(self):
+        algo = default_implementation()
+        algo._significance_tester._pvalue = 0
+        assert algo.fit_predict([0] * 100 + [1] * 100) == [100]
+
     def test_default_implementation_sanity(self):
         algo = default_implementation()
         for cp in range(4, 100):

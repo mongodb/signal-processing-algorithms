@@ -62,4 +62,4 @@ class QHatPermutationsSignificanceTester(SignificanceTester):
             if best_permuted_qhat >= candidate.qhat:
                 permutes_higher_qhat_count += 1
         candidate.probability = permutes_higher_qhat_count / (self._permutations + 1)
-        return candidate.probability < self._pvalue
+        return candidate.probability <= self._pvalue
