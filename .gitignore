@@ -29,3 +29,4 @@ pip-wheel-metadata/
 secrets.*
 
 .ipynb*/
+.hypothesis/

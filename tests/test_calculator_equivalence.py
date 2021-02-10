@@ -38,7 +38,7 @@ def test_calculate_q(cross_term, x_term, y_term, x_len, y_len):
     assume(x_len + y_len != 0)
     q1 = numpy_calculator._calculate_q(cross_term, x_term, y_term, x_len, y_len)
     q2 = cext_calculator._calculate_q(cross_term, x_term, y_term, x_len, y_len)
-    assert q1 == q2
+    np.testing.assert_almost_equal(q1, q2, 5)
 
 
 @given(

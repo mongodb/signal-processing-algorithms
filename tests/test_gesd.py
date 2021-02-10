@@ -250,32 +250,32 @@ class TestMedianOutlier(object):
 
 
 class TestCanonical(object):
-    """ Test canonical example from
-https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm#Generalized%20ESD%20Test%20Example.
+    """Test canonical example from
+    https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm#Generalized%20ESD%20Test%20Example.
 
-  H0:  there are no outliers in the data
-  Ha:  there are up to 10 outliers in the data
+      H0:  there are no outliers in the data
+      Ha:  there are up to 10 outliers in the data
 
-  Significance level:  α = 0.05
-  Critical region:  Reject H0 if Ri > critical value
+      Significance level:  α = 0.05
+      Critical region:  Reject H0 if Ri > critical value
 
-  Summary Table for Two-Tailed Test
-  ---------------------------------------
-        Exact           Test     Critical
-    Number of      Statistic    Value, λi
-  Outliers, i      Value, Ri          5 %
-  ---------------------------------------
-          1          3.118          3.158
-          2          2.942          3.151
-          3          3.179          3.143 *
-          4          2.810          3.136
-          5          2.815          3.128
-          6          2.848          3.120
-          7          2.279          3.111
-          8          2.310          3.103
-          9          2.101          3.094
-         10          2.067          3.085
-     """
+      Summary Table for Two-Tailed Test
+      ---------------------------------------
+            Exact           Test     Critical
+        Number of      Statistic    Value, λi
+      Outliers, i      Value, Ri          5 %
+      ---------------------------------------
+              1          3.118          3.158
+              2          2.942          3.151
+              3          3.179          3.143 *
+              4          2.810          3.136
+              5          2.815          3.128
+              6          2.848          3.120
+              7          2.279          3.111
+              8          2.310          3.103
+              9          2.101          3.094
+             10          2.067          3.085
+    """
 
     # pylint: disable=unused-variable
 

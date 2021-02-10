@@ -4,7 +4,7 @@ E-Divisive related tests.
 
 import numpy as np
 
-from miscutils.testing import relative_patch_maker
+from servicetools.testing import relative_patch_maker
 
 from signal_processing_algorithms.e_divisive import default_implementation
 from signal_processing_algorithms.e_divisive.calculators import __name__ as patchable
