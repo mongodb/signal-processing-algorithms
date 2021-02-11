@@ -1,4 +1,4 @@
-FROM quay.io/pypa/manylinux1_x86_64
+FROM quay.io/pypa/manylinux2010_x86_64
 
 RUN /opt/python/cp37-cp37m/bin/pip install poetry
 
