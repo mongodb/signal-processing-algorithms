@@ -42,7 +42,7 @@ def calculate_qhat_values(diffs: np.ndarray) -> np.ndarray:
     :param diffs: The difference matrix.
     :return: The qhat values.
     """
-    qhat_values = np.zeros(len(diffs), dtype=np.float)
+    qhat_values = np.zeros(len(diffs), dtype=np.float64)
 
     # We will partition our signal into:
     # X = {Xi; 0 <= i < tau}

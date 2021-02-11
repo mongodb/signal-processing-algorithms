@@ -56,7 +56,7 @@ try:
         """
         size = len(matrix)
         result = LIB_E_DIVISIVE.square_sum(
-            np.ascontiguousarray(matrix, dtype=np.float),
+            np.ascontiguousarray(matrix, dtype=np.float64),
             size,
             row_start,
             row_end,
@@ -76,7 +76,7 @@ try:
         if not isinstance(series, np.ndarray):
             series = np.array(series, dtype=float)
         size = len(series)
-        diffs = np.zeros((size, size), dtype=np.float)
+        diffs = np.zeros((size, size), dtype=np.float64)
         result = LIB_E_DIVISIVE.calculate_diffs(series, diffs, size)
         if result is not True:
             raise Exception("Native E-Divisive returned unexpected value {}".format(result))
@@ -93,7 +93,7 @@ try:
         size = len(diffs)
         qhat_values = np.zeros(len(diffs))
         result = LIB_E_DIVISIVE.qhat_values(
-            np.ascontiguousarray(diffs, dtype=np.float), qhat_values, size
+            np.ascontiguousarray(diffs, dtype=np.float64), qhat_values, size
         )
         if result is not True:
             raise Exception("Native E-Divisive returned unexpected value {}".format(result))

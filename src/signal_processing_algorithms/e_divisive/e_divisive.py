@@ -38,8 +38,8 @@ class EDivisive:
         self._change_points: List[EDivisiveChangePoint] = []
         self._sorted_change_points: List[EDivisiveChangePoint] = []
         self._calculated = False
-        self._series: np.ndarray = np.ndarray(0, dtype=np.float)
-        self._diffs: np.ndarray = np.ndarray((0, 0), dtype=np.float)
+        self._series: np.ndarray = np.ndarray((0, 0), dtype=np.float64)
+        self._diffs: np.ndarray = np.ndarray((0, 0), dtype=np.float64)
 
     @staticmethod
     def _find_change_point(qhat_values: np.ndarray) -> EDivisiveChangePoint:
@@ -54,9 +54,9 @@ class EDivisive:
             max_q = qhat_values[max_q_index]
         else:
             max_q = 0
-            max_q_index = 0
+            max_q_index = 0  # type: ignore
 
-        return EDivisiveChangePoint(index=max_q_index, qhat=max_q)
+        return EDivisiveChangePoint(index=max_q_index, qhat=max_q)  # type: ignore
 
     def _add_change_point(self, change_point: EDivisiveChangePoint) -> None:
         self._change_points.append(change_point)
@@ -120,9 +120,9 @@ class EDivisive:
         if series is None:
             series = []
         if not isinstance(series, np.ndarray):
-            series = np.array(series, dtype=np.float)
-        if series.dtype is not np.float:
-            series = np.array(series, dtype=np.float)
+            series = np.array(series, dtype=np.float64)
+        if series.dtype is not np.float64:
+            series = np.array(series, dtype=np.float64)
         self._series = series
         self._reset_change_points()
 
