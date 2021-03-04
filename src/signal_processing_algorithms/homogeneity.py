@@ -1,5 +1,5 @@
 """Homogeneity Calculator."""
-from typing import Callable, List, Tuple, Union
+from typing import Callable, List, Union
 
 import numpy as np
 
