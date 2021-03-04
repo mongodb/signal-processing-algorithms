@@ -91,29 +91,3 @@ class HomogeneityCalculator:
         :return: Energy coefficient of homogeneity.
         """
         return 1 - self.get_inhomogeneity(x, y)
-
-    def get_distribution_homogeneity_and_likelihood(
-        self,
-        x: Union[List[float], np.ndarray],
-        y: Union[List[float], np.ndarray],
-        num_tests: int = 1000,
-    ) -> Tuple[float, float]:
-        """
-        Return the homogeneity of the distributions and its likelihood.
-
-        :param x: A 1D array of observations.
-        :param y: A 1D array of observations.
-        :param num_tests: Number of permutation tests
-        :return: Homogeneity of the distributions and the likelihood of the homogeneity
-        """
-        homogeneity = self.get_homogeneity(x, y)
-        combined = np.concatenate((x, y), axis=None)
-        count = 0
-        x_len = len(x)
-        for _ in range(num_tests):
-            np.random.shuffle(combined)
-            x_prime, y_prime = combined[:x_len], combined[x_len:]
-            shuffled_homogeneity = self.get_homogeneity(x_prime, y_prime)
-            if shuffled_homogeneity > homogeneity:
-                count += 1
-        return homogeneity, 1 - (count / num_tests)
