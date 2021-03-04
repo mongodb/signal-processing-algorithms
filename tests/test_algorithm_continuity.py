@@ -32,7 +32,7 @@ class OldEDivisive(object):
         :return:
         """
         length = len(series)
-        qs = np.zeros(length, dtype=np.float)
+        qs = np.zeros(length, dtype=np.float64)
         if length < 5:
             return qs
 
@@ -59,7 +59,7 @@ class TestAlgorithmContinuity(object):
     Test Algorithm Continuity is correct.
     """
 
-    series = np.array([1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3], dtype=np.float)
+    series = np.array([1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3], dtype=np.float64)
     expected = np.array(
         [
             0,
@@ -75,7 +75,7 @@ class TestAlgorithmContinuity(object):
             0,
             0,
         ],
-        dtype=np.float,
+        dtype=np.float64,
     )
     expected_proper_division = np.array(
         [

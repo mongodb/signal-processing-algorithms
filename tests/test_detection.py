@@ -114,7 +114,7 @@ class TestPostRunCheck:
         Helper for simple regression test.
         """
         if series is None:
-            series = np.full(30, 50, dtype=np.int)
+            series = np.full(30, 50, dtype=int)
             series[15:30] = 100
         calculator = numpy_calculator
         tester = QHatPermutationsSignificanceTester(
@@ -148,7 +148,7 @@ class TestPostRunCheck:
         """
         Test finding behind.
         """
-        series = np.full(30, 50, dtype=np.int)
+        series = np.full(30, 50, dtype=int)
         series[14] = 76
         series[15:30] = 100
 
@@ -161,7 +161,7 @@ class TestPostRunCheck:
         """
         Test another simple regression.
         """
-        series = np.full(30, 50, dtype=np.int)
+        series = np.full(30, 50, dtype=int)
         series[2] = 100
         series[15:30] = 100
 
@@ -177,7 +177,7 @@ class TestPostRunCheck:
         Test regression and recovery.
         """
         # create an array filled with 50s' then set some ranges to 100
-        series = np.full(45, 50, dtype=np.int)
+        series = np.full(45, 50, dtype=int)
         series[2] = 100
         series[15:30] = 100
         series[32] = 100
@@ -198,7 +198,7 @@ class TestPostRunCheck:
         """
         length = 45
 
-        series = np.full(length, 50, dtype=np.int)
+        series = np.full(length, 50, dtype=int)
         series[2] = 100
         series[15:30] = 100
         series[30:] = 150
@@ -219,7 +219,7 @@ class TestPostRunCheck:
         """
         Test no regression.
         """
-        series = np.full(30, 50, dtype=np.int)
+        series = np.full(30, 50, dtype=int)
         points, _ = self._test_helper(series=series)
         assert 0 == len(points)
 

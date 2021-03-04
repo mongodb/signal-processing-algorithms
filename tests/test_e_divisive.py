@@ -7,7 +7,7 @@ import pytest
 from signal_processing_algorithms.e_divisive import default_implementation
 from signal_processing_algorithms.e_divisive.calculators.cext_calculator import C_EXTENSION_LOADED
 
-EMPTY_NP_ARRAY = np.array([], dtype=np.float)
+EMPTY_NP_ARRAY = np.array([], dtype=np.float64)
 
 
 class TestEDivisive(object):
