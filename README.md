@@ -1,7 +1,7 @@
 # Signal Processing Algorithms
 
-A suite of algorithms implementing [E-Divisive with Means](https://arxiv.org/pdf/1306.4933.pdf) and
- [Generalized ESD Test for Outliers](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm) in python.
+A suite of algorithms implementing [E-Divisive with Means](https://arxiv.org/pdf/1306.4933.pdf), 
+ [Generalized ESD Test for Outliers](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm) and [Energy Coefficient of Homogeneity](http://pages.stat.wisc.edu/~wahba/stat860public/pdf4/Energy/EnergyDistance10.1002-wics.1375.pdf) in python.
 
 ## Getting Started - Users
 ```
@@ -102,6 +102,25 @@ tester = QHatPermutationsSignificanceTester(
 algo = EDivisive(calculator=calculator, significance_tester=tester)
 
 change_points = algo.get_change_points(series)
+```
+
+## Energy coefficient of homogeneity
+[Energy coefficient of homogeneity](http://pages.stat.wisc.edu/~wahba/stat860public/pdf4/Energy/EnergyDistance10.1002-wics.1375.pdf) (E-coefficient of homogeneity) is the normalized energy statistics that is a 
+measure of how similar/different two distributions are. E-coefficient of homogeneity = 1 for the same distributions.
+
+E-coefficient of inhomogeneity is defined as:
+<a href="https://www.codecogs.com/eqnedit.php?latex=H=\frac{2E||X-Y||&space;-&space;E||X-X'||&space;-&space;E||Y-Y'||}{2E||X-Y||}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?H=\frac{2E||X-Y||&space;-&space;E||X-X'||&space;-&space;E||Y-Y'||}{2E||X-Y||}" title="H=\frac{2E||X-Y|| - E||X-X'|| - E||Y-Y'||}{2E||X-Y||}" /></a>
+
+E-coefficient of homogeneity = 1 - E-coefficient of inhomogeneity
+
+```
+from signal_processing_algorithms.homogeneity import HomogeneityCalculator
+from some_module import series1, series2
+
+homogeneity_calculator = HomogeneityCalculator()
+homogeneity = homogeneity_calculator.get_homogeneity(series1, series2)
+inhomogeneity = homogeneity_calculator.get_inhomogeneity(series1, series2)
+
 ```
 
 ## Interactive Documentation
