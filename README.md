@@ -104,22 +104,37 @@ algo = EDivisive(calculator=calculator, significance_tester=tester)
 change_points = algo.get_change_points(series)
 ```
 
-## Energy coefficient of homogeneity
-[Energy coefficient of homogeneity](http://pages.stat.wisc.edu/~wahba/stat860public/pdf4/Energy/EnergyDistance10.1002-wics.1375.pdf) (E-coefficient of homogeneity) is the normalized energy statistics that is a 
-measure of how similar/different two distributions are. E-coefficient of homogeneity = 1 for the same distributions.
+## Energy statistics
+[Energy Statistics](https://en.wikipedia.org/wiki/Energy_distance) is the statistical concept of Energy Distance 
+and can be used to measure how similar/different two distributions are.
+
+For statistical samples from two random variables X and Y:
+x1, x2, ..., xn and y1, y2, ..., yn
+
+E-Statistic is defined as:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E_{n,m}(X,Y):=2A-B-C" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_{n,m}(X,Y):=2A-B-C" title="E_{n,m}(X,Y):=2A-B-C" /></a>
+
+where,
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=A:={\frac&space;{1}{nm}}\sum&space;_{i=1}^{n}\sum&space;_{j=1}^{m}\|x_{i}-y_{j}\|,B:={\frac&space;{1}{n^{2}}}\sum&space;_{i=1}^{n}\sum&space;_{j=1}^{n}\|x_{i}-x_{j}\|,C:={\frac&space;{1}{m^{2}}}\sum&space;_{i=1}^{m}\sum&space;_{j=1}^{m}\|y_{i}-y_{j}\|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A:={\frac&space;{1}{nm}}\sum&space;_{i=1}^{n}\sum&space;_{j=1}^{m}\|x_{i}-y_{j}\|,B:={\frac&space;{1}{n^{2}}}\sum&space;_{i=1}^{n}\sum&space;_{j=1}^{n}\|x_{i}-x_{j}\|,C:={\frac&space;{1}{m^{2}}}\sum&space;_{i=1}^{m}\sum&space;_{j=1}^{m}\|y_{i}-y_{j}\|" title="A:={\frac {1}{nm}}\sum _{i=1}^{n}\sum _{j=1}^{m}\|x_{i}-y_{j}\|,B:={\frac {1}{n^{2}}}\sum _{i=1}^{n}\sum _{j=1}^{n}\|x_{i}-x_{j}\|,C:={\frac {1}{m^{2}}}\sum _{i=1}^{m}\sum _{j=1}^{m}\|y_{i}-y_{j}\|" /></a>
+
+T-statistic is defined as: 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=T={\frac&space;{nm}{n&plus;m}}E_{{n,m}}(X,Y)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?T={\frac&space;{nm}{n&plus;m}}E_{{n,m}}(X,Y)" title="T={\frac {nm}{n+m}}E_{{n,m}}(X,Y)" /></a>
 
 E-coefficient of inhomogeneity is defined as:
+
 <a href="https://www.codecogs.com/eqnedit.php?latex=H=\frac{2E||X-Y||&space;-&space;E||X-X'||&space;-&space;E||Y-Y'||}{2E||X-Y||}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?H=\frac{2E||X-Y||&space;-&space;E||X-X'||&space;-&space;E||Y-Y'||}{2E||X-Y||}" title="H=\frac{2E||X-Y|| - E||X-X'|| - E||Y-Y'||}{2E||X-Y||}" /></a>
 
-E-coefficient of homogeneity = 1 - E-coefficient of inhomogeneity
 
 ```
-from signal_processing_algorithms.homogeneity import HomogeneityCalculator
+from signal_processing_algorithms.energy_statistics import EnergyStatistics
 from some_module import series1, series2
 
-homogeneity_calculator = HomogeneityCalculator()
-homogeneity = homogeneity_calculator.get_homogeneity(series1, series2)
-inhomogeneity = homogeneity_calculator.get_inhomogeneity(series1, series2)
+es = EnergyStatistics(series1, series2)
+# results of permutation tests on the statistics
+stas_and_probs = es.get_statistics_and_probabilities()
 
 ```
 
