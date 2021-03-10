@@ -1,7 +1,7 @@
 # Signal Processing Algorithms
 
 A suite of algorithms implementing [E-Divisive with Means](https://arxiv.org/pdf/1306.4933.pdf), 
- [Generalized ESD Test for Outliers](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm) and [Energy Coefficient of Homogeneity](http://pages.stat.wisc.edu/~wahba/stat860public/pdf4/Energy/EnergyDistance10.1002-wics.1375.pdf) in python.
+ [Generalized ESD Test for Outliers](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm) and [Energy Statistics](https://en.wikipedia.org/wiki/Energy_distance) in python.
 
 ## Getting Started - Users
 ```
