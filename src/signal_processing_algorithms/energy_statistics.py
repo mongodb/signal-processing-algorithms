@@ -124,22 +124,22 @@ class EnergyStatistics:
         self,
         distances_within_x: np.ndarray,
         distances_within_y: np.ndarray,
-        distances_within_xy: np.ndarray,
+        distances_between_xy: np.ndarray,
     ) -> Tuple[float, float, float]:
         """
         Return energy statistics.
 
         :param distances_within_x: Distance matrix of pairwise distances within distribution x.
         :param distances_within_y: Distance matrix of pairwise distances within distribution y.
-        :param distances_within_xy: Distance matrix of pairwise distances
+        :param distances_between_xy: Distance matrix of pairwise distances
         between distribution x and y.
         :return: E-statistic, T-statistic and H(E-coefficient of inhomogeneity)
         """
         e = self.get_e_from_distance_matrices(
-            distances_within_x, distances_within_y, distances_within_xy
+            distances_within_x, distances_within_y, distances_between_xy
         )
         t = self.get_t_from_e(self._t_coefficient, e)
-        h = self.get_h_from_e_and_distance_matrix(e, distances_within_xy)
+        h = self.get_h_from_e_and_distance_matrix(e, distances_between_xy)
         return e, t, h
 
     def _get_statistics_from_combined_distance_matrix(
@@ -263,6 +263,9 @@ class EnergyStatistics:
         row_indices = np.arange(len_combined)
         for _ in range(num_tests):
             np.random.shuffle(row_indices)
+            # np.ix_()'s main use is to create an open mesh so that we can use it to
+            # select specific indices from an array (specific sub-array).
+            # We use it here to rearrange the combined distance matrix.
             shuffled_distances = distances_between_all[np.ix_(row_indices, row_indices)]
             shuffled_e, shuffled_t, shuffled_h = self._get_statistics_from_combined_distance_matrix(
                 shuffled_distances
@@ -275,14 +278,12 @@ class EnergyStatistics:
                 count_h += 1
 
         return EnergyStatisticsTestResult(
-            **{
-                "e": self.e,
-                "e_p": count_e / num_tests,
-                "t": self.t,
-                "t_p": count_t / num_tests,
-                "h": self.h,
-                "h_p": count_h / num_tests,
-            }
+            e=self.e,
+            e_p=count_e / num_tests,
+            t=self.t,
+            t_p=count_t / num_tests,
+            h=self.h,
+            h_p=count_h / num_tests,
         )
 
 
