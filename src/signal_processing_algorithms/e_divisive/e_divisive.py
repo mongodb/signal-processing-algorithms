@@ -102,7 +102,7 @@ class EDivisive:
 
         :return: The change points.
         """
-        self._diffs = self._calculator.calculate_diffs(self._series, self._series)
+        self._diffs = self._calculator.calculate_diffs(self._series)
         best_candidate = self._calculate_best_change_point()
         # Compute additional change points, so long as they are significant
         while self._significance_tester.is_significant(

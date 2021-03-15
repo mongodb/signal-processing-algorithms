@@ -129,12 +129,15 @@ E-coefficient of inhomogeneity is defined as:
 
 
 ```
-from signal_processing_algorithms.energy_statistics import EnergyStatistics
+from signal_processing_algorithms.energy_statistics import energy_statistics
+from signal_processing_algorithms.energy_statistics import permutation_test
 from some_module import series1, series2
 
-es = EnergyStatistics(series1, series2)
-# results of permutation tests on the statistics
-stas_and_probs = es.get_statistics_and_probabilities()
+# To get Energy Statistics of the distributions.
+es = energy_statistics.get_energy_statistics(series1, series2)
+
+# To get Energy Statistics and permutation test results of the distributions.
+es_with_probabilities = permutation_test.get_energy_statistics_and_probabilities(series1, series2, permutations=100)
 
 ```
 

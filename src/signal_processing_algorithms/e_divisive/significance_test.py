@@ -36,7 +36,7 @@ class QHatPermutationsSignificanceTester(SignificanceTester):
         for a, b in pairwise(windows):
             window = copy.copy(series[a:b])
             np.random.shuffle(window)
-            permuted_diffs = self._calculator.calculate_diffs(window, window)
+            permuted_diffs = self._calculator.calculate_diffs(window)
             permuted_qhat_values = self._calculator.calculate_qhat_values(permuted_diffs)
             permute_test_qhat_values.append(max(permuted_qhat_values))
         return max(permute_test_qhat_values)
