@@ -8,9 +8,10 @@ import structlog
 
 from more_itertools import pairwise
 
-from signal_processing_algorithms.determinism import deterministic_random
+from signal_processing_algorithms.determinism import deterministic_numpy_random
 from signal_processing_algorithms.e_divisive.base import EDivisiveCalculator, SignificanceTester
 from signal_processing_algorithms.e_divisive.change_points import EDivisiveChangePoint
+from signal_processing_algorithms.utils import convert
 
 LOG = structlog.get_logger()
 
@@ -97,11 +98,11 @@ class EDivisive:
 
     def _compute_change_points(self) -> None:
         """
-        Compute change points for a series of floats/integers.
+        Compute change points for a univariate or multivariate series of floats/integers.
 
         :return: The change points.
         """
-        self._diffs = self._calculator.calculate_diffs(self._series)
+        self._diffs = self._calculator.calculate_diffs(self._series, self._series)
         best_candidate = self._calculate_best_change_point()
         # Compute additional change points, so long as they are significant
         while self._significance_tester.is_significant(
@@ -111,19 +112,16 @@ class EDivisive:
             best_candidate = self._calculate_best_change_point()
         self._calculated = True
 
-    def fit(self, series: Union[List[float], np.ndarray]) -> None:
+    def fit(self, series: Union[List[float], List[List[float]], np.ndarray]) -> None:
         """
-        Fit the algorithm to a series.
+        Fit the algorithm to a univariate or a multivariate series.
 
         :param series: The series.
         """
         if series is None:
             series = []
-        if not isinstance(series, np.ndarray):
-            series = np.array(series, dtype=np.float64)
-        if series.dtype is not np.float64:
-            series = np.array(series, dtype=np.float64)
-        self._series = series
+
+        self._series = convert(series)
         self._reset_change_points()
 
     def predict(self) -> List[int]:
@@ -135,15 +133,15 @@ class EDivisive:
         if self._calculated:
             return [cp.index for cp in self._sorted_change_points]
         if self._seed is not None:
-            with deterministic_random(self._seed), np.errstate(all="raise"):
+            with deterministic_numpy_random(self._seed), np.errstate(all="raise"):
                 self._compute_change_points()
         else:
             self._compute_change_points()
         return [cp.index for cp in self._sorted_change_points]
 
-    def fit_predict(self, series: Union[List[float], np.ndarray]) -> List[int]:
+    def fit_predict(self, series: Union[List[float], List[List[float]], np.ndarray]) -> List[int]:
         """
-        Fit the algorithm to a new series and predict its change points.
+        Fit the algorithm to a new univariate or multivariate series and predict its change points.
 
         :param series: The series to fit.
         :return: The change points.
@@ -152,10 +150,10 @@ class EDivisive:
         return self.predict()
 
     def get_change_points(
-        self, series: Union[List[float], np.ndarray]
+        self, series: Union[List[float], List[List[float]], np.ndarray]
     ) -> List[EDivisiveChangePoint]:
         """
-        Calculate change points for a series of floats.
+        Calculate change points for a univariate or multivariate series of floats.
 
         :param series: The series of floats.
         :return: The list of change points.

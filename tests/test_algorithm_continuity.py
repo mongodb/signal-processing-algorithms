@@ -4,12 +4,7 @@ E-Divisive related tests.
 
 import numpy as np
 
-from servicetools.testing import relative_patch_maker
-
 from signal_processing_algorithms.e_divisive import default_implementation
-from signal_processing_algorithms.e_divisive.calculators import __name__ as patchable
-
-patch = relative_patch_maker(patchable)
 
 
 class OldEDivisive(object):
@@ -107,20 +102,9 @@ class TestAlgorithmContinuity(object):
         Test that the current algorithm generates the same q values as the original.
         """
         algorithm = default_implementation()
+        algorithm.fit(self.series)
         q_values = algorithm._calculator.calculate_qhat_values(
-            algorithm._calculator.calculate_diffs(self.series)
-        )
-        assert all(np.isclose(self.expected_proper_division, q_values))
-
-    @patch("cext_calculator.C_EXTENSION_LOADED")
-    def test_fallback(self, mock_loaded):
-        """
-        Test that the fallback algorithm generates the same q values as the original.
-        """
-        mock_loaded.__bool__.return_value = False
-        algorithm = default_implementation()
-        q_values = algorithm._calculator.calculate_qhat_values(
-            algorithm._calculator.calculate_diffs(self.series)
+            algorithm._calculator.calculate_diffs(algorithm._series, algorithm._series)
         )
         assert all(np.isclose(self.expected_proper_division, q_values))
 
@@ -143,21 +127,8 @@ class TestRobustContinuity:
         Test that the current algorithm generates the same q values as the original.
         """
         algorithm = default_implementation()
+        algorithm.fit(robust_series)
         q_values = algorithm._calculator.calculate_qhat_values(
-            algorithm._calculator.calculate_diffs(robust_series)
-        )
-        assert all(np.isclose(expected_result_robust_series_proper_division, q_values))
-
-    @patch("cext_calculator.C_EXTENSION_LOADED")
-    def test_fallback(
-        self, mock_loaded, robust_series, expected_result_robust_series_proper_division
-    ):
-        """
-        Test that the fallback algorithm generates the same q values as the original.
-        """
-        mock_loaded.__bool__.return_value = False
-        algorithm = default_implementation()
-        q_values = algorithm._calculator.calculate_qhat_values(
-            algorithm._calculator.calculate_diffs(robust_series)
+            algorithm._calculator.calculate_diffs(algorithm._series, algorithm._series)
         )
         assert all(np.isclose(expected_result_robust_series_proper_division, q_values))

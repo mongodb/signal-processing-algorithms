@@ -1,6 +1,5 @@
 """Significance Tester for E-Divisive."""
 import copy
-import random
 
 from typing import Iterable
 
@@ -36,10 +35,8 @@ class QHatPermutationsSignificanceTester(SignificanceTester):
         permute_test_qhat_values = []
         for a, b in pairwise(windows):
             window = copy.copy(series[a:b])
-            # Backwards compatibility with Python 2.7 implementation, see:
-            # https://stackoverflow.com/questions/38943038/difference-between-python-2-and-3-for-shuffle-with-a-given-seed
-            random.shuffle(window, random.random)
-            permuted_diffs = self._calculator.calculate_diffs(window)
+            np.random.shuffle(window)
+            permuted_diffs = self._calculator.calculate_diffs(window, window)
             permuted_qhat_values = self._calculator.calculate_qhat_values(permuted_diffs)
             permute_test_qhat_values.append(max(permuted_qhat_values))
         return max(permute_test_qhat_values)

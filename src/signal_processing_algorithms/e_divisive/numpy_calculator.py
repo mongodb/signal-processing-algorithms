@@ -3,6 +3,8 @@ import numpy as np
 
 from scipy.special import comb
 
+from signal_processing_algorithms.distance import get_distance_matrix
+
 
 def _calculate_q(cross_term: float, x_term: float, y_term: float, x_len: int, y_len: int) -> float:
     """
@@ -23,16 +25,16 @@ def _calculate_q(cross_term: float, x_term: float, y_term: float, x_len: int, y_
     return new_q
 
 
-def calculate_diffs(series: np.ndarray) -> np.ndarray:
+def calculate_diffs(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     """
-    Given an array N calculate an NxN difference matrix.
+    Return the matrix of pairwise distances between x and y.
 
-    :param series: The array to calculate the matrix for.
-    :return: The difference matrix.
+    :param x: An m x n array of m observations for n variables.
+    :param y: An l x n array of l observations for n variables.
+    :return: An m x l array where (i,j)th value is the distance between the observation
+    at i-th row of x and j-th row of y.
     """
-    row, col = np.meshgrid(series, series)
-    diffs = abs(row - col)
-    return diffs
+    return get_distance_matrix(x, y)
 
 
 def calculate_qhat_values(diffs: np.ndarray) -> np.ndarray:

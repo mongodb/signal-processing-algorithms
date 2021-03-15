@@ -5,7 +5,6 @@ import numpy as np
 import pytest
 
 from signal_processing_algorithms.e_divisive import default_implementation
-from signal_processing_algorithms.e_divisive.calculators.cext_calculator import C_EXTENSION_LOADED
 
 EMPTY_NP_ARRAY = np.array([], dtype=np.float64)
 
@@ -29,12 +28,6 @@ class TestEDivisive(object):
         """
         with pytest.raises(ValueError, match=r"could not convert string to float: 'string'"):
             default_implementation().get_change_points("string")
-
-    def test_native_package_included_in_package(self):
-        """
-        Test that the native implementation of e_divisive is included in the package
-        """
-        assert C_EXTENSION_LOADED
 
     def test_absolute_certainty(self):
         algo = default_implementation()

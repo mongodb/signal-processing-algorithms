@@ -1,6 +1,6 @@
 import numpy as np
 from signal_processing_algorithms.e_divisive.base import EDivisiveCalculator
-from signal_processing_algorithms.e_divisive.calculators import numpy_calculator as EDivisive
+from signal_processing_algorithms.e_divisive import numpy_calculator as EDivisive
 
 
 class NumpyWindowedCalculator(EDivisiveCalculator):

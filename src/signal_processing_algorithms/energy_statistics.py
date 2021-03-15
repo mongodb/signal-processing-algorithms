@@ -5,6 +5,7 @@ from typing import List, Tuple, Union
 import numpy as np
 
 from signal_processing_algorithms.distance import get_distance_matrix
+from signal_processing_algorithms.utils import convert
 
 
 @dataclass
@@ -297,13 +298,4 @@ def get_valid_input(series: Union[List[float], List[List[float]], np.ndarray]) -
     if series is None or len(series) == 0:
         raise ValueError("Distribution cannot be empty.")
 
-    if not isinstance(series, np.ndarray):
-        series = np.asarray(series, dtype=np.float64)
-
-    if series.dtype is not np.float64:
-        series = np.array(series, dtype=np.float64)
-
-    if len(series.shape) == 1:
-        series = np.atleast_2d(series).T
-
-    return series
+    return convert(series)
