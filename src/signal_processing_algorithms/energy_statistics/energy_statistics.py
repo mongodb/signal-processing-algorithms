@@ -4,9 +4,11 @@ from typing import List, Union, Optional
 
 import numpy as np
 from more_itertools import pairwise
+from signal_processing_algorithms.energy_statistics.cext_calculator import C_EXTENSION_LOADED, calculate_diffs, \
+    calculate_t_values
 
 
-def _get_distance_matrix(x: np.ndarray, y: np.ndarray) -> np.ndarray:
+def _get_distance_matrix(series: np.ndarray, use_c_if_possible=True) -> np.ndarray:
     """
     Return the matrix of pairwise distances between x and y.
 
@@ -15,7 +17,10 @@ def _get_distance_matrix(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     :return: An m x l array where (i,j)th value is the distance between the observation
     at i-th row of x and j-th row of y.
     """
-    return np.linalg.norm(x[:, np.newaxis] - y, axis=2)
+    if use_c_if_possible and C_EXTENSION_LOADED and series.shape[1] == 1:
+        return calculate_diffs(series.flatten())
+    else:
+        return np.linalg.norm(series[:, np.newaxis] - series, axis=2)
 
 
 @dataclass
@@ -68,13 +73,16 @@ def _calculate_stats(x: float, y: float, xy: float, n: int, m: int) -> (float, f
     return e, t, h
 
 
-def _calculate_e_statistics(diffs: np.ndarray) -> np.ndarray:
+def _calculate_t_stats(diffs: np.ndarray, use_c_if_possible=True) -> np.ndarray:
     """
     Find e-statistics values given a difference matrix.
 
     :param diffs: The difference matrix.
     :return: The qhat values.
     """
+    if use_c_if_possible and C_EXTENSION_LOADED:
+        return calculate_t_values(diffs)
+
     statistics = np.zeros(len(diffs), dtype=np.float64)
 
     # We will partition our signal into:
@@ -111,7 +119,7 @@ def _get_next_significant_change_point(distances, change_points, memo, pvalue, p
             candidates.append(memo[bounds])
         else:
             a, b = bounds
-            stats = _calculate_e_statistics(distances[a:b, a:b])
+            stats = _calculate_t_stats(distances[a:b, a:b])
             idx = np.argmax(stats)
             new = (idx + a, stats[idx])
             candidates.append(new)
@@ -124,7 +132,7 @@ def _get_next_significant_change_point(distances, change_points, memo, pvalue, p
             row_indices = np.arange(b-a) + a
             np.random.shuffle(row_indices)
             shuffled_distances = distances[np.ix_(row_indices, row_indices)]
-            stats = _calculate_e_statistics(shuffled_distances)
+            stats = _calculate_t_stats(shuffled_distances)
             permute_t.append(max(stats))
         best = max(permute_t)
         if best >= best_candidate[1]:
@@ -188,7 +196,7 @@ def _get_valid_input(series: Union[List[float], List[List[float]], np.ndarray]) 
 def e_divisive(series, pvalue=0.05, permutations=100) -> List[int]:
     series = _get_valid_input(series)
     change_points = []
-    distances = _get_distance_matrix(series, series)
+    distances = _get_distance_matrix(series)
     memo = {}
     while significant_change_point := _get_next_significant_change_point(distances, change_points, memo, pvalue, permutations):
         change_points.append(significant_change_point)
@@ -212,7 +220,7 @@ def get_energy_statistics(
     :return: Energy statistics of distributions x and y.
     """
     xy = np.concatenate((_get_valid_input(x), _get_valid_input(y)))
-    distances = _get_distance_matrix(xy, xy)
+    distances = _get_distance_matrix(xy)
     return _get_energy_statistics_from_distance_matrix(distances, len(x), len(y))
 
 
@@ -319,7 +327,7 @@ def get_energy_statistics_and_probabilities(
 
     """
 
-    distances_between_all = _get_distance_matrix(combined, combined)
+    distances_between_all = _get_distance_matrix(combined)
     len_combined = len(combined)
 
     count_e = 0
