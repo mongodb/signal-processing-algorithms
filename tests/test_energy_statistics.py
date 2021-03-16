@@ -7,7 +7,7 @@ import pytest
 
 from signal_processing_algorithms.energy_statistics.energy_statistics import (
     get_energy_statistics,
-    get_valid_input,
+    _get_valid_input, _get_energy_statistics_from_distance_matrix, _convert, _get_distance_matrix,
 )
 
 
@@ -122,7 +122,7 @@ class TestEnergyStatistics(object):
     def test_get_valid_input(self):
         """Test for valid input transformation."""
         x = [i for i in range(10)]
-        actual = get_valid_input(x)
+        actual = _get_valid_input(x)
         assert isinstance(actual, np.ndarray)
         assert actual.dtype == np.float64
         assert actual.shape == (10, 1)
