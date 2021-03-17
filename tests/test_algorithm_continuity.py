@@ -103,7 +103,7 @@ class TestAlgorithmContinuity(object):
         """
         algorithm = default_implementation()
         algorithm.fit(self.series)
-        q_values = algorithm._calculator.calculate_qhat_values(
+        q_values = algorithm._calculator.calculate_t_values(
             algorithm._calculator.calculate_diffs(algorithm._series)
         )
         assert all(np.isclose(self.expected_proper_division, q_values))
@@ -128,7 +128,7 @@ class TestRobustContinuity:
         """
         algorithm = default_implementation()
         algorithm.fit(robust_series)
-        q_values = algorithm._calculator.calculate_qhat_values(
+        q_values = algorithm._calculator.calculate_t_values(
             algorithm._calculator.calculate_diffs(algorithm._series)
         )
         assert all(np.isclose(expected_result_robust_series_proper_division, q_values))

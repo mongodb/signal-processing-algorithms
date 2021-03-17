@@ -14,9 +14,10 @@ authors = [
 license="Apache-2.0"
 repository="https://github.com/mongodb/signal-processing-algorithms"
 readme = "README.md"
+build = "build.py"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 more-itertools = "^8.2.0"
 numpy = "^1.18.1"
 scipy = "^1.3"
