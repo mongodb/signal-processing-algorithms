@@ -9,7 +9,7 @@ authors = [
     "Henrik Ingo <henrik.ingo@mongodb.com>",
     "Jeff Zambory <jeff.zambory@mongodb.com>",
     "Jim O'Leary <jim.oleary@mongodb.com>",
-    "Lydia Stepanek <lydia.stepanek@mongodb.com>",
+    "Lydia Stepanek <lydia.stepanek@mongodb.com>"
 ]
 license="Apache-2.0"
 repository="https://github.com/mongodb/signal-processing-algorithms"

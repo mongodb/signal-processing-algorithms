@@ -5,40 +5,40 @@
 #include <stdbool.h>
 
 /* public functions */
-bool qhat_values(double *diffs, double * values, int length);
-bool calculate_diffs(double *series, double *diffs, int length);
-double calculate_q(double cross_term, double x_term, double y_term, int x_len, int y_len);
-double square_sum(double * diffs, int length, int row_start, int row_end, int column_start, int column_end);
+bool t_stat_values(double *distances, double * values, int length);
+bool calculate_distance_matrix(double *series, double *distances, int length);
+double calculate_t(double cross_term, double x_term, double y_term, int x_len, int y_len);
+double square_sum(double * distances, int length, int row_start, int row_end, int column_start, int column_end);
 
 /**
- * Calculate the diffs from the input series.
+ * Calculate the pairwise distances within the input series.
  *
- * @param diffs The NxN double array to calculate the differences for.
- * @param series The series of values to calculate a difference matrix for.
+ * @param distances The NxN double array to calculate the distances for.
+ * @param series The series of values to calculate a distance matrix for.
  * @param length The length of the series of values.
  */
-bool calculate_diffs(double *series, double *diffs, int length){
+bool calculate_distance_matrix(double *series, double *distances, int length){
     int i;
     int j;
 
     for(i=0;i<length;i++){
         for(j=0;j<length;j++){
-            diffs[i * length + j] = fabs(series[i] - series[j]);
+            distances[i * length + j] = fabs(series[i] - series[j]);
         }
     }
     return true;
 }
 
 /**
- * Calculate a single qhat value from the terms.
+ * Calculate a single t value from the terms.
  *
- * @param cross_term The sum of the differences across partitions.
- * @param x_term The sum of the differences within the X partition.
- * @param term3 The sum of the differences within the Y partition.
+ * @param cross_term The sum of the distances across partitions.
+ * @param x_term The sum of the distances within the X partition.
+ * @param term3 The sum of the distances within the Y partition.
  * @param x_len The length/size of the X partition.
  * @param y_len The length/size of the Y partition.
  */
-double calculate_q(double cross_term, double x_term, double y_term, int x_len, int y_len) {
+double calculate_t(double cross_term, double x_term, double y_term, int x_len, int y_len) {
     double cross_term_reg;
     double x_term_reg;
     double y_term_reg;
@@ -67,38 +67,38 @@ double calculate_q(double cross_term, double x_term, double y_term, int x_len, i
 }
 
 /**
- * Calculate the sum of terms in a NxN difference matrix within
+ * Calculate the sum of terms in a NxN distance matrix within
  * the square [row_start, row_end) x [column_start, column_end).
  *
- * @param diffs The NxN difference matrix.
- * @param length The length of one dimension of the difference matrix, i.e. the integer N.
+ * @param distances The NxN distance matrix.
+ * @param length The length of one dimension of the distance matrix, i.e. the integer N.
  * @param row_start Index of the row where the square begins (inclusive).
  * @param row_end Index of the row where the square ends (exclusive).
  * @param column_start Index of the column where the square begins (inclusive).
  * @param column_end Index of the column where the square ends (exclusive).
  */
-double square_sum(double * diffs, int length, int row_start, int row_end, int column_start, int column_end) {
+double square_sum(double * distances, int length, int row_start, int row_end, int column_start, int column_end) {
     int row;
     int column;
     double sum = 0.0;
     for(row=row_start;row<row_end;row++) {
         for(column=column_start;column<column_end;column++) {
-            sum = sum + diffs[row * length + column];
+            sum = sum + distances[row * length + column];
         }
     }
     return sum;
 }
 
 /**
- * Calculate all the qhat values for the input series and store the results in the values
+ * Calculate all the t values for the input series and store the results in the values
  * array.
  *
- * @param diffs The NxN difference matrix for the series.
- * @param qhat_values The array to store the qhat values in.
+ * @param distances The NxN distance matrix for the series.
+ * @param t_stat_values The array to store the t values in.
  * @param length Length of the series, i.e. N.
  * @return true for success.
  */
-bool qhat_values(double * diffs, double * qhat_values, int length){
+bool t_stat_values(double * distances, double * t_stat_values, int length){
     // We will partition our signal into:
     // X = {Xi; 0 <= i < tau}
     // Y = {Yj; tau <= j < len(signal) }
@@ -109,24 +109,24 @@ bool qhat_values(double * diffs, double * qhat_values, int length){
     // sum |Xi - Xj| for i < j < tau
     double x_term = 0;
     // sum |Yi - Yj| for tau <= i < j
-    double y_term = square_sum(diffs, length, 0, length, 0 length);
+    double y_term = 0;
+
+    int row;
+    for(row=0;row<length;row++) {
+        y_term += square_sum(distances, length, row, row+1, row, length);
+    }
 
     int tau;
     for(tau=0;tau<length;tau++) {
-        qhat_values[tau] = calculate_q(cross_term, x_term, y_term, tau, length - tau);
+        t_stat_values[tau] = calculate_t(cross_term, 2*x_term, 2*y_term, tau, length - tau);
 
-        double left = square_sum(diffs, length, tau, tau+1, 0, tau);
-        double up = square_sum(diffs, length, 0, tau, tau, tau+1);
-        double right = square_sum(diffs, length, tau, tau+1, tau, length);
-        double down = square_sum(diffs, length, tau, length, tau, tau+1);
+        double column_delta = square_sum(distances, length, 0, tau, tau, tau+1);
+        double row_delta = square_sum(distances, length, tau, tau+1, tau, length);
 
-        double x_delta = left + up;
-        double y_delta = - right - down;
-        double xy_delta = - y_delta - x_delta;
+        cross_term = cross_term - column_delta + row_delta;
+        x_term = x_term + column_delta;
+        y_term = y_term - row_delta;
 
-        cross_term = cross_term + xy_delta;
-        x_term = x_term + x_delta;
-        y_term = y_term + y_delta;
     }
 
     return true;

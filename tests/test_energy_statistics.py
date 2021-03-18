@@ -5,9 +5,10 @@ Unit tests for signal_processing/energy_statistics.py.
 import numpy as np
 import pytest
 
+from signal_processing_algorithms.determinism import deterministic_numpy_random
 from signal_processing_algorithms.energy_statistics.energy_statistics import (
     get_energy_statistics,
-    _get_valid_input, _get_energy_statistics_from_distance_matrix, _convert, _get_distance_matrix,
+    get_energy_statistics_and_probabilities,
 )
 
 
@@ -25,13 +26,15 @@ class TestEnergyStatistics(object):
         """Test invalid number of variables for different observations in the two distributions."""
         with pytest.raises(
             ValueError,
-            match=r"Number of variables per observation must be the same for both distributions!",
+            match=r"all the input array dimensions for the concatenation axis must match exactly, "
+            r"but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 2",
         ):
             get_energy_statistics([1, 2, 3], [[1, 2], [3, 4]])
 
         with pytest.raises(
             ValueError,
-            match=r"Number of variables per observation must be the same for both distributions!",
+            match=r"all the input array dimensions for the concatenation axis must match exactly, "
+            r"but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 2",
         ):
             get_energy_statistics([[1], [2], [3]], [[1, 2]])
 
@@ -44,7 +47,7 @@ class TestEnergyStatistics(object):
         assert energy_statistics.h == 0
 
     def test_energy_statistics_similar_distributions(self):
-        """Test energy statistics for similar distributions."""
+        """Test energy statistics for similar distributions gives small e,t,h values."""
         x = np.arange(1, 100, 1)
         y = np.arange(1, 105, 1)
         energy_statistics = get_energy_statistics(x, y)
@@ -53,7 +56,7 @@ class TestEnergyStatistics(object):
         np.testing.assert_almost_equal(energy_statistics.h, 0.002, decimal=3)
 
     def test_energy_statistics_different_distributions(self):
-        """Test energy statistics for different distributions."""
+        """Test energy statistics for different distributions gives large e,t h values."""
         x = np.arange(1, 100, 1)
         y = np.arange(10000, 13000, 14)
         energy_statistics = get_energy_statistics(x, y)
@@ -119,10 +122,103 @@ class TestEnergyStatistics(object):
         assert diff_es.t > similar_es.t
         assert diff_es.h > similar_es.h
 
-    def test_get_valid_input(self):
-        """Test for valid input transformation."""
-        x = [i for i in range(10)]
-        actual = _get_valid_input(x)
-        assert isinstance(actual, np.ndarray)
-        assert actual.dtype == np.float64
-        assert actual.shape == (10, 1)
+    def test_get_energy_statistics_and_probabilities_same_distribution(self):
+        """Test energy statistics and probabilities for the same distribution.
+
+        The results should have large p values and small statistics values."""
+        with deterministic_numpy_random(1234):
+            x = np.arange(10, 70)
+            es_with_probs = get_energy_statistics_and_probabilities(x, x, permutations=100)
+            np.testing.assert_almost_equal(es_with_probs.e, 0, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.e_pvalue, 0.990, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t, 0, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t_pvalue, 0.990, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h, 0, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h_pvalue, 0.990, decimal=3)
+
+    def test_get_energy_statistics_and_probabilities_very_similar_distributions(self):
+        """Test energy statistics and probabilities for very similar distributions.
+
+        The results should have large p values and small statistics values."""
+        with deterministic_numpy_random(1234):
+            x = np.arange(10, 70)
+            y = np.arange(12, 65)
+            es_with_probs = get_energy_statistics_and_probabilities(x, y, permutations=100)
+            print(es_with_probs)
+
+            np.testing.assert_almost_equal(es_with_probs.e, 0.211, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.e_pvalue, 0.881, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t, 5.961, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t_pvalue, 0.881, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h, 0.005, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h_pvalue, 0.881, decimal=3)
+
+    def test_get_energy_statistics_and_probabilities_similar_distribution_samples(self):
+        """Test sufficiently large number samples drawn from the same distribution causes sampling error.
+
+        P value appears to be low even though the samples are drawn from the same distribution."""
+        with deterministic_numpy_random(1234):
+            mean, standard_deviation = 1, 0.1
+            num_samples = 1000
+
+            random_state = np.random.RandomState(0)
+            x = random_state.normal(mean, standard_deviation, size=num_samples)
+            y = random_state.normal(mean, standard_deviation, size=num_samples)
+
+            es_with_probs = get_energy_statistics_and_probabilities(x, y, permutations=100)
+
+            np.testing.assert_almost_equal(es_with_probs.e, 0, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.e_pvalue, 0.257, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t, 0.125, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t_pvalue, 0.257, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h, 0.001, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h_pvalue, 0.257, decimal=3)
+
+    def test_get_energy_statistics_and_probabilities_similar_distribution_samples_multivariate(
+        self,
+    ):
+        """Test sufficiently large number samples drawn from the same distribution causes sampling error.
+
+        P value appears to be low even though the samples are drawn from the same distribution."""
+        with deterministic_numpy_random(1234):
+            mean = np.zeros(3)
+            mean.fill(1)
+            standard_deviation = np.zeros((3, 3))
+            standard_deviation.fill(0.01)
+
+            num_samples = 1000
+
+            random_state = np.random.RandomState(0)
+            x = random_state.multivariate_normal(mean, standard_deviation, size=num_samples)
+            y = random_state.multivariate_normal(mean, standard_deviation, size=num_samples)
+
+            es_with_probs = get_energy_statistics_and_probabilities(x, y, permutations=100)
+
+            np.testing.assert_almost_equal(es_with_probs.e, 0, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.e_pvalue, 0.643, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t, 0.124, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t_pvalue, 0.643, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h, 0, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h_pvalue, 0.643, decimal=3)
+
+    def test_get_energy_statistics_and_probabilities_different_distribution_samples(self):
+        """Test energy statistics test for clearly different distributions for sufficiently large samples.
+
+        Test if results have large statistic values and low p values."""
+
+        with deterministic_numpy_random(1234):
+            num_samples = 1000
+            random_state = np.random.RandomState(0)
+
+            mean1, standard_deviation1 = 200, 0.1
+            mean2, standard_deviation2 = 1, 0.1
+            x = random_state.normal(mean1, standard_deviation1, size=num_samples)
+            y = random_state.normal(mean2, standard_deviation2, size=num_samples)
+
+            es_with_probs = get_energy_statistics_and_probabilities(x, y, permutations=100)
+            np.testing.assert_almost_equal(es_with_probs.e, 397.767, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.e_pvalue, 0.0, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t, 198883.754, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.t_pvalue, 0.0, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h, 0.999, decimal=3)
+            np.testing.assert_almost_equal(es_with_probs.h_pvalue, 0.0, decimal=3)
