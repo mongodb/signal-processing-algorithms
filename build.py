@@ -7,8 +7,8 @@ from setuptools import Extension
 
 ext_modules = [
     Extension(
-        "signal_processing_algorithms.e_divisive.calculators._e_divisive",
-        sources=["./src/signal_processing_algorithms/e_divisive/calculators/e_divisive.c"],
+        "signal_processing_algorithms.energy_statistics._e_divisive",
+        sources=["./src/signal_processing_algorithms/energy_statistics/e_divisive.c"],
         extra_compile_args=["-O3"],
         extra_link_args=[] if "Darwin" in platform.system() else ["-shared"],
         optional=True,

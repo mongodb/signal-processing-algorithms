@@ -7,6 +7,8 @@ import random
 from contextlib import contextmanager
 from typing import Generator
 
+import numpy as np
+
 
 @contextmanager
 def deterministic_random(seed: float) -> Generator:
@@ -22,3 +24,19 @@ def deterministic_random(seed: float) -> Generator:
         yield
     finally:
         random.setstate(state)
+
+
+@contextmanager
+def deterministic_numpy_random(seed: float) -> Generator:
+    """
+    Call np.random.seed(seed) during invocation and then restore to None after.
+
+    :param seed: RNG seed.
+    :return: Deterministic random context.
+    """
+    state = np.random.get_state()
+    np.random.seed(seed)
+    try:
+        yield
+    finally:
+        np.random.set_state(state)

@@ -1,7 +1,8 @@
 # Signal Processing Algorithms
 
-A suite of algorithms implementing [E-Divisive with Means](https://arxiv.org/pdf/1306.4933.pdf) and
- [Generalized ESD Test for Outliers](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm) in python.
+A suite of algorithms implementing [Energy Statistics](https://en.wikipedia.org/wiki/Energy_distance), 
+[E-Divisive with Means](https://arxiv.org/pdf/1306.4933.pdf) and 
+[Generalized ESD Test for Outliers](https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h3.htm) in python.
 
 ## Getting Started - Users
 ```
@@ -34,6 +35,42 @@ $ poetry run pytest --runslow
 
 **Some of the larger tests can take a significant amount of time (more than 2 hours).**
 
+## Energy statistics
+[Energy Statistics](https://en.wikipedia.org/wiki/Energy_distance) is the statistical concept of Energy Distance 
+and can be used to measure how similar/different two distributions are.
+
+For statistical samples from two random variables X and Y:
+x1, x2, ..., xn and y1, y2, ..., yn
+
+E-Statistic is defined as:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E_{n,m}(X,Y):=2A-B-C" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_{n,m}(X,Y):=2A-B-C" title="E_{n,m}(X,Y):=2A-B-C" /></a>
+
+where,
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=A:={\frac&space;{1}{nm}}\sum&space;_{i=1}^{n}\sum&space;_{j=1}^{m}\|x_{i}-y_{j}\|,B:={\frac&space;{1}{n^{2}}}\sum&space;_{i=1}^{n}\sum&space;_{j=1}^{n}\|x_{i}-x_{j}\|,C:={\frac&space;{1}{m^{2}}}\sum&space;_{i=1}^{m}\sum&space;_{j=1}^{m}\|y_{i}-y_{j}\|" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A:={\frac&space;{1}{nm}}\sum&space;_{i=1}^{n}\sum&space;_{j=1}^{m}\|x_{i}-y_{j}\|,B:={\frac&space;{1}{n^{2}}}\sum&space;_{i=1}^{n}\sum&space;_{j=1}^{n}\|x_{i}-x_{j}\|,C:={\frac&space;{1}{m^{2}}}\sum&space;_{i=1}^{m}\sum&space;_{j=1}^{m}\|y_{i}-y_{j}\|" title="A:={\frac {1}{nm}}\sum _{i=1}^{n}\sum _{j=1}^{m}\|x_{i}-y_{j}\|,B:={\frac {1}{n^{2}}}\sum _{i=1}^{n}\sum _{j=1}^{n}\|x_{i}-x_{j}\|,C:={\frac {1}{m^{2}}}\sum _{i=1}^{m}\sum _{j=1}^{m}\|y_{i}-y_{j}\|" /></a>
+
+T-statistic is defined as: 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=T={\frac&space;{nm}{n&plus;m}}E_{{n,m}}(X,Y)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?T={\frac&space;{nm}{n&plus;m}}E_{{n,m}}(X,Y)" title="T={\frac {nm}{n+m}}E_{{n,m}}(X,Y)" /></a>
+
+E-coefficient of inhomogeneity is defined as:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=H=\frac{2E||X-Y||&space;-&space;E||X-X'||&space;-&space;E||Y-Y'||}{2E||X-Y||}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?H=\frac{2E||X-Y||&space;-&space;E||X-X'||&space;-&space;E||Y-Y'||}{2E||X-Y||}" title="H=\frac{2E||X-Y|| - E||X-X'|| - E||Y-Y'||}{2E||X-Y||}" /></a>
+
+
+```
+from signal_processing_algorithms.energy_statistics import energy_statistics
+from some_module import series1, series2
+
+# To get Energy Statistics of the distributions.
+es = energy_statistics.get_energy_statistics(series1, series2)
+
+# To get Energy Statistics and permutation test results of the distributions.
+es_with_probabilities = energy_statistics.get_energy_statistics_and_probabilities(series1, series2, permutations=100)
+
+```
+
 ## Intro to E-Divisive
 
 Detecting distributional changes in a series of numerical values can be surprisingly difficult. Simple systems based on thresholds or
@@ -45,21 +82,23 @@ One robust way of detecting many of the changes missed by other approaches is to
  series with the expected distance between samples within those portions.
  
 That is to say, assuming that the two portions can each be modeled as i.i.d. samples drawn from distinct random variables
- (X for the first portion, Y for the second portion), you would expect the following to be non-zero if there is a
- sdifference between the two portions: 
+ (X for the first portion, Y for the second portion), you would expect the E-statistic to be non-zero if there is a
+ difference between the two portions: 
  
- <a href="https://www.codecogs.com/eqnedit.php?latex=\varepsilon&space;(X,&space;Y;&space;\alpha&space;)&space;=&space;2E|X-Y|^\alpha&space;-&space;E|X-X'|^\alpha&space;-&space;E|Y-Y'|^\alpha" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\varepsilon&space;(X,&space;Y;&space;\alpha&space;)&space;=&space;2E|X-Y|^\alpha&space;-&space;E|X-X'|^\alpha&space;-&space;E|Y-Y'|^\alpha" title="\varepsilon (X, Y; \alpha ) = 2E|X-Y|^\alpha - E|X-X'|^\alpha - E|Y-Y'|^\alpha" /></a>
+ <a href="https://www.codecogs.com/eqnedit.php?latex=E_{n,m}(X,Y):=2A-B-C" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_{n,m}(X,Y):=2A-B-C" title="E_{n,m}(X,Y):=2A-B-C" /></a>
+ where A, B and C are as defined in the Energy Statistics above.
 
-Where alpha is some fixed constant in (0, 2).
-This can be calculated empirically with samples from the portions corresponding to X, Y as follows:
- 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{2}{mn}&space;\underset{i=1}{\overset{n}{\sum}}\underset{j=1}{\overset{m}{\sum}}|X_{i}-Y_{j}|^\alpha&space;-\binom{n}{2}^{-1}\underset{1\leq&space;i<k\leq&space;n}{\sum}|X_{i}-X_{k}|^\alpha&space;-&space;\binom{m}{2}^{-1}\underset{1&space;\leq&space;j<k&space;\leq&space;m}{\sum}|Y_{j}-Y_{k}|^\alpha" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{2}{mn}&space;\underset{i=1}{\overset{n}{\sum}}\underset{j=1}{\overset{m}{\sum}}|X_{i}-Y_{j}|^\alpha&space;-\binom{n}{2}^{-1}\underset{1\leq&space;i<k\leq&space;n}{\sum}|X_{i}-X_{k}|^\alpha&space;-&space;\binom{m}{2}^{-1}\underset{1&space;\leq&space;j<k&space;\leq&space;m}{\sum}|Y_{j}-Y_{k}|^\alpha" title="\frac{2}{mn} \underset{i=1}{\overset{n}{\sum}}\underset{j=1}{\overset{m}{\sum}}|X_{i}-Y_{j}|^\alpha -\binom{n}{2}^{-1}\underset{1\leq i<k\leq n}{\sum}|X_{i}-X_{k}|^\alpha - \binom{m}{2}^{-1}\underset{1 \leq j<k \leq m}{\sum}|Y_{j}-Y_{k}|^\alpha" /></a>
- 
-Thus for a series Z of length L, we find the most likely change point by solving the following for argmax(&tau;) (with a scaling factor of mn/(m+n) and &alpha;=1 for simplicity):
+One can prove that <a href="https://www.codecogs.com/eqnedit.php?latex={E_{n,m}(X,Y)\geq&space;0}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?{E_{n,m}(X,Y)\geq&space;0}" title="{E_{n,m}(X,Y)\geq 0}" /></a> and that the corresponding population value is zero if and only if X and Y have the same distribution. Under this null hypothesis the test statistic
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=T={\frac&space;{nm}{n&plus;m}}E_{{n,m}}(X,Y)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?T={\frac&space;{nm}{n&plus;m}}E_{{n,m}}(X,Y)" title="T={\frac {nm}{n+m}}E_{{n,m}}(X,Y)" /></a>
+
+converges in distribution to a quadratic form of independent standard normal random variables. Under the alternative hypothesis T tends to infinity. This makes it possible to construct a consistent statistical test, the energy test for equal distributions
+  
+Thus for a series Z of length L,
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=Z&space;=&space;\{Z_{1},&space;...,&space;Z_{\tau}&space;,&space;...&space;,&space;Z_{L}\},&space;X&space;=\{Z_{1},...,Z_{\tau}\},&space;Y=\{Z_{\tau&plus;1}\,...,Z_{L}\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Z&space;=&space;\{Z_{1},&space;...,&space;Z_{\tau}&space;,&space;...&space;,&space;Z_{L}\},&space;X&space;=\{Z_{1},...,Z_{\tau}\},&space;Y=\{Z_{\tau&plus;1}\,...,Z_{L}\}" title="Z = \{Z_{1}, ..., Z_{\tau} , ... , Z_{L}\}, X =\{Z_{1},...,Z_{\tau}\}, Y=\{Z_{\tau+1}\,...,Z_{L}\}" /></a>
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{2}{L}(&space;\underset{i=1}{\overset{\tau}{\sum}}\underset{j=\tau&plus;1}{\overset{L}{\sum}}|X_{i}-Y_{j}|&space;-\frac{L-\tau}{\tau-1}\underset{1\leq&space;i<k\leq&space;\tau}{\sum}|X_{i}-X_{k}|&space;-&space;\frac{\tau}{L-\tau-1}\underset{\tau&space;<&space;j<k&space;\leq&space;L}{\sum}|Y_{j}-Y_{k}|)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{2}{L}(&space;\underset{i=1}{\overset{\tau}{\sum}}\underset{j=\tau&plus;1}{\overset{L}{\sum}}|X_{i}-Y_{j}|&space;-\frac{L-\tau}{\tau-1}\underset{1\leq&space;i<k\leq&space;\tau}{\sum}|X_{i}-X_{k}|&space;-&space;\frac{\tau}{L-\tau-1}\underset{\tau&space;<&space;j<k&space;\leq&space;L}{\sum}|Y_{j}-Y_{k}|)" title="\frac{2}{L}( \underset{i=1}{\overset{\tau}{\sum}}\underset{j=\tau+1}{\overset{L}{\sum}}|X_{i}-Y_{j}| -\frac{L-\tau}{\tau-1}\underset{1\leq i<k\leq \tau}{\sum}|X_{i}-X_{k}| - \frac{\tau}{L-\tau-1}\underset{\tau < j<k \leq L}{\sum}|Y_{j}-Y_{k}|)" /></a>
+we find the most likely change point by solving the following for &tau; such that it has the maximum T statistic value.
 
 ### Multiple Change Points
 
@@ -88,31 +127,9 @@ We allow users to configure a permutation tester with `pvalue`
  
 ### Example
 ```
-from signal_processing_algorithms.e_divisive import EDivisive
-from signal_processing_algorithms.e_divisive.calculators import cext_calculator
-from signal_processing_algorithms.e_divisive.significance_test import QHatPermutationsSignificanceTester
+from signal_processing_algorithms.energy_statistics import energy_statistics
 from some_module import series
 
-// Use C-Extension calculator for calculating divergence metrics
-calculator = cext_calculator
-// Permutation tester with 1% significance threshold performing 100 permutations for each change point candidate
-tester = QHatPermutationsSignificanceTester(
-    calculator=calculator, pvalue=0.01, permutations=100
-)
-algo = EDivisive(calculator=calculator, significance_tester=tester)
-
-change_points = algo.get_change_points(series)
+change_points = energy_statistics.e_divisive(series, pvalue=0.01, permutations=100)
 ```
 
-## Interactive Documentation
-
-In addition to the package itself and this readme, we have a set of interactive documents that you can use to recreate experiments and investigations of this package, play with them, and make your own!
-
-The requirement for running these documents are:
-* Docker
-* Docker Compose
-
-Once you have these, simply navigate to [`$REPO/docs`](./docs), execute `docker-compose up` and follow the link!
-
-You can also view these documents in non-interactive form w/o docker+compose:
-* [Profiling](./docs/profiling/algorithm_implementations.ipynb)

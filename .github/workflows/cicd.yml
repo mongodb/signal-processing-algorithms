@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.8]
     name: Run Tests/Linters
     steps:
       - name: Checkout
@@ -28,7 +28,7 @@ jobs:
       - name: Test
         run: |
           source $HOME/.poetry/env
-          poetry run pytest
+          poetry run pytest --runslow
   deploy:
     needs: test
     if: ${{ github.event_name == 'push' }}
