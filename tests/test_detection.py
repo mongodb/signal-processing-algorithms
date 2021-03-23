@@ -302,10 +302,3 @@ class TestComputeChangePoints:
         series = huge_profile["series"]
         expected = huge_profile["expected"]
         self._test_helper(expected, series)
-
-    # takes around 2h 15m
-    @pytest.mark.slow
-    def test_humungous(self, humongous_profile):
-        series = humongous_profile["series"]
-        expected = humongous_profile["expected"]
-        self._test_helper(expected, series)
