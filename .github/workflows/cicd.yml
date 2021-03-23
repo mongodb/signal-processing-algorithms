@@ -28,7 +28,7 @@ jobs:
       - name: Test
         run: |
           source $HOME/.poetry/env
-          poetry run pytest
+          poetry run pytest --runslow
   deploy:
     needs: test
     if: ${{ github.event_name == 'push' }}
