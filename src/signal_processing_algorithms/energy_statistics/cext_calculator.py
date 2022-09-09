@@ -2,6 +2,7 @@
 import os
 
 from ctypes import c_bool, c_double, c_int
+from typing import Optional, Tuple
 
 import numpy as np
 import structlog
@@ -22,6 +23,10 @@ try:
     # setup the return types and argument types
     LIB_E_DIVISIVE.t_stat_values.restype = c_bool
     LIB_E_DIVISIVE.t_stat_values.argtypes = [MATRIX_DOUBLE, ARRAY_DOUBLE, c_int]
+
+    # setup the return types and argument types
+    LIB_E_DIVISIVE.largest_q.restype = c_bool
+    LIB_E_DIVISIVE.largest_q.argtypes = [MATRIX_DOUBLE, ARRAY_DOUBLE, c_int, c_int]
 
     # setup the return types and argument types
     LIB_E_DIVISIVE.calculate_distance_matrix.restype = c_bool
@@ -100,6 +105,34 @@ try:
             raise Exception("Native E-Divisive returned unexpected value {}".format(result))
 
         return t_stat_values
+
+    def calculate_largest_q(
+        distance_matrix: np.ndarray, min_cluster_size: int
+    ) -> Tuple[float, Optional[int]]:
+        """
+        Marshall the parameters and call the native largest_q function.
+
+        :param distance_matrix: The distance matrix.
+        :param min_cluster_size: The minimum number of data points for a cluster.
+        :return: The largest Q-value found with the index dividing the two clusters.
+        """
+        size = len(distance_matrix)
+        # index 0: if 1, a Q value was calculated
+        # index 1: largest Q value
+        # index 2: index
+        largest_q = np.zeros(3)
+        result = LIB_E_DIVISIVE.largest_q(
+            np.ascontiguousarray(distance_matrix, dtype=np.float64),
+            largest_q,
+            size,
+            min_cluster_size,
+        )
+        if result is not True:
+            raise Exception("Native E-Divisive returned unexpected value {}".format(result))
+
+        if largest_q[0] == 1:
+            return largest_q[1], int(largest_q[2])
+        return -1 * np.inf, None
 
     C_EXTENSION_LOADED = True
 except OSError:
