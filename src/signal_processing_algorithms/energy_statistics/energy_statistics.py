@@ -53,6 +53,9 @@ def _convert(series: Union[List[float], List[List[float]], np.ndarray]) -> np.nd
     if len(series.shape) == 1:
         series = np.atleast_2d(series).T
 
+    if not isinstance(series, np.ndarray):
+        raise Exception("Series is not the expected type, np.ndarray.")
+
     return series
 
 

@@ -13,7 +13,7 @@ from signal_processing_algorithms.energy_statistics.energy_statistics import (
 
 
 class TestEnergyStatistics(object):
-    """Test for Energy Statistics. """
+    """Test for Energy Statistics."""
 
     def test_no_data(self):
         """Test no data."""
@@ -26,15 +26,17 @@ class TestEnergyStatistics(object):
         """Test invalid number of variables for different observations in the two distributions."""
         with pytest.raises(
             ValueError,
-            match=r"all the input array dimensions for the concatenation axis must match exactly, "
-            r"but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 2",
+            match=r"all the input array dimensions except for the concatenation axis must match "
+            r"exactly, but along dimension 1, the array at index 0 has size 1 and the array at "
+            r"index 1 has size 2",
         ):
             get_energy_statistics([1, 2, 3], [[1, 2], [3, 4]])
 
         with pytest.raises(
             ValueError,
-            match=r"all the input array dimensions for the concatenation axis must match exactly, "
-            r"but along dimension 1, the array at index 0 has size 1 and the array at index 1 has size 2",
+            match=r"all the input array dimensions except for the concatenation axis must match "
+            r"exactly, but along dimension 1, the array at index 0 has size 1 and the array at "
+            r"index 1 has size 2",
         ):
             get_energy_statistics([[1], [2], [3]], [[1, 2]])
 
