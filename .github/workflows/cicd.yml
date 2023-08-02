@@ -24,6 +24,7 @@ jobs:
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           poetry install
+          apt-get -y install python3-distutils
       - name: Test
         run: |
           poetry run pytest --runslow
