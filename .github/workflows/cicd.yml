@@ -23,11 +23,11 @@ jobs:
       - name: Install
         run: |
           curl -sSL https://install.python-poetry.org | python
-          source $HOME/.poetry/env
+          source $HOME/.local/bin
           poetry install
       - name: Test
         run: |
-          source $HOME/.poetry/env
+          source $HOME/.local/bin
           poetry run pytest --runslow
   deploy:
     needs: test
