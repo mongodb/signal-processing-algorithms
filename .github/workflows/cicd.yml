@@ -23,11 +23,9 @@ jobs:
       - name: Install
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-          source $HOME/.local/bin
           poetry install
       - name: Test
         run: |
-          source $HOME/.local/bin
           poetry run pytest --runslow
   deploy:
     needs: test
