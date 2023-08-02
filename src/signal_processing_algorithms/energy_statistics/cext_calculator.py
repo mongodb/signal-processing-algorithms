@@ -10,8 +10,6 @@ LOG = structlog.get_logger()
 
 # A flag indicating if the native library was found. Pessimistically set to False.
 so_path = os.path.dirname(os.path.abspath(__file__))
-LOG.error(f"LOOK HERE: {so_path}")
-LOG.error(f"{os.listdir(so_path)}")
 try:
     # input type for the cos_doubles function
     # must be a double array, with single dimension that is contiguous
