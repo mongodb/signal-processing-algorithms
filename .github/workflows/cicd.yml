@@ -23,11 +23,11 @@ jobs:
       - name: Install
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
-          export PATH="$HOME/.local/bin:$PATH"
+          source $HOME/.local/bin
           poetry install
       - name: Test
         run: |
-          export PATH="$HOME/.local/bin:$PATH"
+          source $HOME/.local/bin
           poetry run pytest --runslow
   deploy:
     needs: test
