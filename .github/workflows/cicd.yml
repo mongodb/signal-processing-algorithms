@@ -8,7 +8,7 @@ on:
       - master
 jobs:
   test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         python-version: [3.8]
@@ -22,17 +22,15 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install
         run: |
-          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
-          source $HOME/.poetry/env
+          pip install poetry==1.3.2
           poetry install
       - name: Test
         run: |
-          source $HOME/.poetry/env
           poetry run pytest --runslow
   deploy:
     needs: test
     if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     name: Publish Package
     steps:
     - name: Checkout
