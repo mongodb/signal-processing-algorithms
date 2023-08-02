@@ -18,7 +18,7 @@ try:
     MATRIX_DOUBLE = np.ctypeslib.ndpointer(dtype=np.double, ndim=2, flags="CONTIGUOUS")
 
     # load the library, using numpy mechanisms
-    LIB_E_DIVISIVE = np.ctypeslib.load_library("_e_divisive", f"{so_path}/e_divisive.c")
+    LIB_E_DIVISIVE = np.ctypeslib.load_library("_e_divisive", so_path)
 
     # setup the return types and argument types
     LIB_E_DIVISIVE.t_stat_values.restype = c_bool
