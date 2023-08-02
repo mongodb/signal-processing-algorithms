@@ -22,12 +22,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install
         run: |
-          curl -sSL https://install.python-poetry.org | python
-          source $HOME/.local/bin
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
           poetry install
       - name: Test
         run: |
-          source $HOME/.local/bin
+          export PATH="$HOME/.local/bin:$PATH"
           poetry run pytest --runslow
   deploy:
     needs: test
