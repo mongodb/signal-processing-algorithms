@@ -95,7 +95,7 @@ def gesd(
             )
         )
 
-    series = ma.array(data)
+    series = ma.array(data)  # type: ignore
     test_statistics = []
     critical_values = []
     potential_outlier_indices = []
@@ -110,8 +110,8 @@ def gesd(
         if mad:
             # sigma in this case is an estimate of .75 quantile * MAD
             # note : 1.4826 == 1 / Q(.75) == 1 / 0.675
-            center = np.ma.median(series)
-            sigma = 1.4826 * np.ma.median(np.fabs(series - center))
+            center = np.ma.median(series)  # type: ignore
+            sigma = 1.4826 * np.ma.median(np.fabs(series - center))  # type: ignore
         else:
             center = series.mean()
             sigma = series.std(ddof=1)
@@ -152,7 +152,8 @@ def gesd(
                     test_statistics,
                     critical_values,
                     np.greater(test_statistics, critical_values),
-                ]
+                ],
+                dtype="object",
             ).T,
         )
 

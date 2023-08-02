@@ -4,6 +4,8 @@ Unit tests for signal_processing/outliers/gesd.py.
 """
 import random
 
+from typing import List
+
 import numpy as np
 import pytest
 
@@ -12,7 +14,7 @@ from signal_processing_algorithms.gesd import gesd
 
 
 class TestGesdInputs(object):
-    """ Test error handling. """
+    """Test error handling."""
 
     def test_no_data(self):
         """Test no data."""
@@ -54,7 +56,7 @@ class TestGesdInputs(object):
 
 
 class TestSimple(object):
-    """ Test Simple data. """
+    """Test Simple data."""
 
     def test_flat(self):
         """Test gesd on flat data."""
@@ -80,9 +82,9 @@ class TestSimple(object):
 
 
 class TestSimpleData(object):
-    """ Test Simple data. """
+    """Test Simple data."""
 
-    series = [-1] * 203 + [-2] + [-1] * 75
+    series: List[float] = [-1.0] * 203 + [-2.0] + [-1.0] * 75
 
     def test_standard(self):
         """Test gesd on almost flat data."""
@@ -103,7 +105,7 @@ class TestSimpleData(object):
 
 
 class TestReal(object):
-    """ Test Real data. """
+    """Test Real data."""
 
     def test_standard(self, real_series):
         """Test gesd on real data with standard."""
@@ -128,7 +130,7 @@ with deterministic_random(3.1415):
 
 
 class TestMeanOutliers(object):
-    """ Test standard z score. """
+    """Test standard z score."""
 
     # pylint: disable=unused-variable
     def test_single(self):
@@ -190,7 +192,7 @@ class TestMeanOutliers(object):
 
 
 class TestMedianOutlier(object):
-    """ Test Median Absolute Deviation. """
+    """Test Median Absolute Deviation."""
 
     def test_single(self):
         """Test gesd on flat data."""
@@ -353,7 +355,7 @@ class TestCanonical(object):
         assert all(np.isclose(self.CANONICAL_CRITICAL, critical_values, rtol=0.001))
 
     def test_mad(self):
-        """ Test MAD z score. """
+        """Test MAD z score."""
         number_outliers, suspicious_indexes, test_statistics, critical_values, all_z_scores = gesd(
             self.ROSNER, mad=True
         )
