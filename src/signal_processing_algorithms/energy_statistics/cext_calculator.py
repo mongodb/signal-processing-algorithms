@@ -10,6 +10,7 @@ LOG = structlog.get_logger()
 
 # A flag indicating if the native library was found. Pessimistically set to False.
 so_path = os.path.dirname(os.path.abspath(__file__))
+print(so_path)
 try:
     # input type for the cos_doubles function
     # must be a double array, with single dimension that is contiguous
@@ -17,7 +18,7 @@ try:
     MATRIX_DOUBLE = np.ctypeslib.ndpointer(dtype=np.double, ndim=2, flags="CONTIGUOUS")
 
     # load the library, using numpy mechanisms
-    LIB_E_DIVISIVE = np.ctypeslib.load_library("_e_divisive", so_path)
+    LIB_E_DIVISIVE = np.ctypeslib.load_library("_e_divisive", f"{so_path}/e_divisive.c")
 
     # setup the return types and argument types
     LIB_E_DIVISIVE.t_stat_values.restype = c_bool
