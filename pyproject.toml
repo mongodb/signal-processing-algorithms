@@ -19,7 +19,7 @@ build = "build.py"
 [tool.poetry.dependencies]
 python = "^3.8"
 more-itertools = "^8.2.0"
-setuptools = "< 60.0.0"
+setuptools = "<66.0.0"
 numpy = "^1.24.4"
 scipy = "^1.8.1"
 structlog = "^19.1"
