@@ -25,7 +25,6 @@ structlog = "^24.2"
 typing-extensions = "^4.5.0"
 pyyaml="^6.0.0"
 gevent="^23.9.1"
-typed-ast="^1.5.0"
 numpy = "^1.24.4"
 
 [tool.poetry.dev-dependencies]
