@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "signal-processing-algorithms"
-version = "2.1.3"
+version = "2.1.4"
 description = "Signal Processing Algorithms from MongoDB"
 authors = [
     "Alexander Costas <alexander.costas@mongodb.com>",
