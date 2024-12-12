@@ -37,7 +37,7 @@ pytest-mypy = "^0.8"
 pytest-pydocstyle = "^2.0.0"
 hypothesis = "^5.19"
 python-service-tools = "^0.4.4"
-black = "^20.8b1"
+black = "^24.3"
 
 [tool.black]
 line-length = 100
