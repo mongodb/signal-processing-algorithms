@@ -8,7 +8,7 @@ set -o pipefail
 # is at the path below.
 #
 # For more information see: https://github.com/pypa/auditwheel
-export PATH="$PATH:/opt/python/cp38-cp38/bin"
+export PATH="$PATH:/opt/python/cp311-cp311/bin"
 
 poetry build
 find ./dist -name "*.whl" | xargs auditwheel repair

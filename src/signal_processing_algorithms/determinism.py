@@ -1,4 +1,5 @@
 """Functions to help setup deterministic results when using random numbers."""
+
 # E-Divisive's definition requires it to permute change-windows
 # which leads to non-determinism: we need to always get the
 # same change-point results when running on the same input.

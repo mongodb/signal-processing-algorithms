@@ -1,4 +1,5 @@
 """C Extension E-Divisive calculator."""
+
 import os
 
 from ctypes import c_bool, c_double, c_int
