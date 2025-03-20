@@ -1,23 +1,25 @@
-[tool.poetry]
+[project]
 name = "signal-processing-algorithms"
 version = "2.1.6"
 description = "Signal Processing Algorithms from MongoDB"
 authors = [
-    "Alexander Costas <alexander.costas@mongodb.com>",
-    "David Bradford <david.bradford@mongodb.com>",
-    "David Daly <david.daly@mongodb.com",
-    "Henrik Ingo <henrik.ingo@mongodb.com>",
-    "Jeff Zambory <jeff.zambory@mongodb.com>",
-    "Jim O'Leary <jim.oleary@mongodb.com>",
-    "Lydia Stepanek <lydia.stepanek@mongodb.com>"
+    {name = "Alexander Costas", email = "alexander.costas@mongodb.com>"},
+    {name = "David Bradford", email = "david.bradford@mongodb.com"},
+    {name = "David Daly", email = "david.daly@mongodb.com"},
+    {name = "Henrik Ingo", email = "henrik.ingo@mongodb.com>"},
+    {name = "Jeff Zambory", email = "jeff.zambory@mongodb.com"},
+    {name = "Jim O'Leary", email = "jim.oleary@mongodb.com"},
+    {name = "Lydia Stepanek", email = "lydia.stepanek@mongodb.com"},
 ]
 license="Apache-2.0"
 repository="https://github.com/mongodb/signal-processing-algorithms"
 readme = "README.md"
 build = "build.py"
 
+dynamic = ["dependencies"]
+requires-python=">=3.11,<4.0"
+
 [tool.poetry.dependencies]
-python = "~3.11"
 more-itertools = "^8.2.0"
 setuptools = ">=65.5.1,<71.0.0"
 scipy = "^1.8.1"
@@ -27,7 +29,7 @@ pyyaml="^6.0.0"
 gevent="^24.10.1"
 numpy = "^1.24.4"
 
-[tool.poetry.dev-dependencies]
+[poetry.group.dev.dependencies]
 pytest = "^8.3.4"
 pytest-black = "^0.3"
 pytest-cov = "^2.8"
