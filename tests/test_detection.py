@@ -1,6 +1,7 @@
 """
 Change points detection related tests.
 """
+
 import numpy as np
 import pytest
 

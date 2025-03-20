@@ -1,4 +1,5 @@
 """Energy statistics."""
+
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -99,8 +100,8 @@ def _calculate_stats(x: float, y: float, xy: float, n: int, m: int) -> Tuple[flo
     :return: The q value generated from the terms.
     """
     xy_avg = xy / (n * m) if n > 0 and m > 0 else 0
-    x_avg = x / (n ** 2) if n > 0 else 0
-    y_avg = y / (m ** 2) if m > 0 else 0
+    x_avg = x / (n**2) if n > 0 else 0
+    y_avg = y / (m**2) if m > 0 else 0
 
     # E-statistic
     e = 2 * xy_avg - x_avg - y_avg

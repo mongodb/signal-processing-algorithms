@@ -136,7 +136,7 @@ def gesd(
         value = (
             (length - i - 1)
             * percentage_point
-            / np.sqrt((length - i - 2 + percentage_point ** 2) * (length - i))
+            / np.sqrt((length - i - 2 + percentage_point**2) * (length - i))
         )
 
         # Update results.
